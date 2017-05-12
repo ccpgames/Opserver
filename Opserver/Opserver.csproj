@@ -386,7 +386,6 @@
     <Content Include="Content\font-awesome\less\screen-reader.less" />
     <Content Include="Content\font-awesome\less\stacked.less" />
     <Content Include="Content\font-awesome\less\variables.less" />
-    <None Include="Default.pubxml" />
     <None Include="Help\SQL\WaitStats.md" />
     <Content Include="Views\CloudFlare\Dashboard.cshtml" />
     <Content Include="Views\Dashboard\Node.Graph.cshtml">
