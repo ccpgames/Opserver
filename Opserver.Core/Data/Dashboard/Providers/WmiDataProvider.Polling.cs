@@ -448,16 +448,16 @@ SELECT Caption,
                 var query = $@"
                     SELECT Name,
                            Timestamp_Sys100NS,
-                           DiskReadBytesPersec,
-                           DiskWriteBytesPersec
+                           DiskReadsPerSec,
+                           DiskWritesPerSec
                       FROM Win32_PerfRawData_PerfDisk_LogicalDisk";
 
                 var queryTime = DateTime.UtcNow.ToEpochTime();
                 var combinedUtil = new Volume.VolumePerformanceUtilization
                 {
                     DateEpoch = queryTime,
-                    ReadAvgBps = 0,
-                    WriteAvgBps = 0
+                    AvgReads = 0,
+                    AvgWrites = 0
                 };
 
                 using (var q = Wmi.Query(Endpoint, query))
@@ -470,14 +470,14 @@ SELECT Caption,
                         var iface = Volumes.Find(i => name == GetCounterName(i.Name));
                         if (iface == null) continue;
 
-                        iface.ReadBps = (float)perfData.GetCalculatedValue("DiskReadBytesPersec", 10000000);
-                        iface.WriteBps = (float)perfData.GetCalculatedValue("DiskWriteBytesPersec", 10000000);
+                        iface.ReadsPerSec = (float)perfData.GetCalculatedValue("DiskReadsPerSec");
+                        iface.WritesPerSec = (float)perfData.GetCalculatedValue("DiskWritesPerSec");
 
                         var util = new Volume.VolumePerformanceUtilization
                         {
                             DateEpoch = queryTime,
-                            ReadAvgBps = iface.ReadBps,
-                            WriteAvgBps = iface.WriteBps
+                            AvgReads = iface.ReadsPerSec,
+                            AvgWrites = iface.WritesPerSec
                         };
 
                         var netData = VolumePerformanceHistory.GetOrAdd(iface.Name, k => new List<Volume.VolumePerformanceUtilization>(1024));
@@ -485,8 +485,8 @@ SELECT Caption,
 
                         //if (PrimaryInterfaces.Contains(iface))
                         {
-                            combinedUtil.ReadAvgBps += util.ReadAvgBps;
-                            combinedUtil.WriteAvgBps += util.WriteAvgBps;
+                            combinedUtil.AvgReads += util.AvgReads;
+                            combinedUtil.AvgWrites += util.AvgWrites;
                         }
                     }
                 }
