@@ -127,7 +127,7 @@ namespace StackExchange.Opserver.Controllers
 
             return points.Count == 0
                 ? EmptySparkSVG()
-                : SparkSVG(points, Convert.ToInt64(points.Max(p => p.Value + p.BottomValue).GetValueOrDefault()), p => (p.Value + p.BottomValue).GetValueOrDefault());
+                : SparkSVG(points, Math.Max(Convert.ToInt64(points.Max(p => p.Value + p.BottomValue).GetValueOrDefault()), 1), p => (p.Value + p.BottomValue).GetValueOrDefault());
         }
 
         [OutputCache(Duration = 120, VaryByParam = "id;iid", VaryByContentEncoding = "gzip;deflate")]
@@ -144,7 +144,7 @@ namespace StackExchange.Opserver.Controllers
             Func<DoubleGraphPoint, double> getter = p => p.Value.GetValueOrDefault(0);
             if (direction == "write") getter = p => p.BottomValue.GetValueOrDefault(0);
 
-            return SparkSVG(points, Convert.ToInt64(points.Max(getter)), p => getter(p));
+            return SparkSVG(points, Math.Max(Convert.ToInt64(points.Max(getter)), 1), p => getter(p));
         }
 
         [OutputCache(Duration = 120, VaryByParam = "node", VaryByContentEncoding = "gzip;deflate")]
@@ -242,8 +242,8 @@ namespace StackExchange.Opserver.Controllers
                       width = SparkPoints;
             long nowEpoch = DateTime.UtcNow.ToEpochTime(),
                 startEpoch = (start ?? SparkStart).ToEpochTime(),
-                divisor = max/50;
-            var range = (nowEpoch - startEpoch)/(float)width;
+                divisor = max / 50;
+            var range = (nowEpoch - startEpoch) / (float)width;
             var first = true;
 
             var sb = StringBuilderCache.Get().AppendFormat(@"<svg version=""1.1"" baseProfile=""full"" width=""{0}"" height=""{1}"" xmlns=""http://www.w3.org/2000/svg"" preserveAspectRatio=""none"">
@@ -251,7 +251,7 @@ namespace StackExchange.Opserver.Controllers
   <path fill=""{2}"" stroke=""none"" d=""M0 50 L", width.ToString(), height.ToString(), Color, AxisColor);
             foreach (var p in points)
             {
-                var pos = (p.DateEpoch - startEpoch)/range;
+                var pos = (p.DateEpoch - startEpoch) / range;
                 if (first && pos > 0)
                 {
                     // TODO: Indicate a missing, ungraphed time portion?
