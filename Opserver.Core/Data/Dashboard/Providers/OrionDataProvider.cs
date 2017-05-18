@@ -337,8 +337,8 @@ Select DateDiff(s, '1970-01-01', vp.DateTime) as DateEpoch,
        Sum(vp.WriteAvgBps) WriteAvgBps,
        Sum(vp.ReadAvgBps) ReadAvgBps
   From (Select vp.DateTime,
-		       vp.AvgDiskWrites WriteAvgBps,
-		       vp.AvgDiskReads ReadAvgBps,
+		       vp.WriteAvgBps WriteAvgBps,
+		       vp.ReadAvgBps ReadAvgBps,
 		       Row_Number() Over(Order By vp.DateTime) RowNumber
           From VolumePerformance vp
          Where vp.VolumeID In @Ids
@@ -378,8 +378,8 @@ Select DateDiff(s, '1970-01-01', vp.DateTime) as DateEpoch,
        Sum(vp.WriteAvgBps) WriteAvgBps,
        Sum(vp.ReadAvgBps) ReadAvgBps
   From (Select vp.DateTime,
-		       vp.AvgDiskWrites WriteAvgBps,
-		       vp.AvgDiskReads ReadAvgBps,
+		       vp.WriteAvgBps WriteAvgBps,
+		       vp.ReadAvgBps ReadAvgBps,
 		       Row_Number() Over(Order By vp.DateTime) RowNumber
           From VolumePerformance vp
          Where vp.VolumeID = @Id
