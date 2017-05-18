@@ -17,8 +17,8 @@ namespace StackExchange.Opserver.Data.Dashboard
         public class VolumePerformanceUtilization : DoubleGraphPoint
         {
             public override long DateEpoch { get; set; }
-            public float? ReadAvgBps { get; internal set; }
-            public float? WriteAvgBps { get; internal set; }
+            public double? ReadAvgBps { get; internal set; }
+            public double? WriteAvgBps { get; internal set; }
 
             public override double? Value => ReadAvgBps;
             public override double? BottomValue => WriteAvgBps;
