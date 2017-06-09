@@ -127,7 +127,7 @@ namespace StackExchange.Opserver.Controllers
 
             return points.Count == 0
                 ? EmptySparkSVG()
-                : SparkSVG(points, Math.Max(Convert.ToInt64(points.Max(p => p.Value + p.BottomValue).GetValueOrDefault()), 1), p => (p.Value + p.BottomValue).GetValueOrDefault());
+                : SparkSVG(points, Math.Max(Convert.ToInt64(points.Max(p => (p.Value + p.BottomValue).GetValueOrDefault(0))), 1), p => (p.Value + p.BottomValue).GetValueOrDefault());
         }
 
         [OutputCache(Duration = 120, VaryByParam = "id;iid", VaryByContentEncoding = "gzip;deflate")]

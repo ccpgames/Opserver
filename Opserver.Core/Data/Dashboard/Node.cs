@@ -164,7 +164,7 @@ namespace StackExchange.Opserver.Data.Dashboard
 
         public float TotalNetworkbps => Interfaces?.Sum(i => i.InBps.GetValueOrDefault(0) + i.OutBps.GetValueOrDefault(0)) ?? 0;
         public float TotalPrimaryNetworkbps => PrimaryInterfaces.Sum(i => i.InBps.GetValueOrDefault(0) + i.OutBps.GetValueOrDefault(0));
-        public float TotalVolumePerformancebps => Volumes?.Sum(i => i.ReadsPerSec.GetValueOrDefault(0) + i.WritesPerSec.GetValueOrDefault(0)) ?? 0;
+        public float TotalVolumePerformanceIops => Volumes?.Sum(i => i.ReadsPerSec.GetValueOrDefault(0) + i.WritesPerSec.GetValueOrDefault(0)) ?? 0;
 
         private DashboardSettings.NodeSettings _settings;
         public DashboardSettings.NodeSettings Settings => _settings ?? (_settings = Current.Settings.Dashboard.GetNodeSettings(PrettyName));
