@@ -28,6 +28,8 @@ namespace StackExchange.Opserver.Models
         public static string PrettyRead(this Volume i) => $"{i.ReadsPerSec ?? 0} IOPS";
 
         public static string PrettyWrite(this Volume i) => $"{i.ReadsPerSec ?? 0} IOPS";
+
+        public static string PrettyTotal(this Volume i) => $"{(i.ReadsPerSec ?? 0) + (i.WritesPerSec ?? 0)} IOPS";
     }
 
     public static class InterfaceExtensionMethods
@@ -101,7 +103,7 @@ namespace StackExchange.Opserver.Models
                 : info.TotalPrimaryNetworkbps.ToSpeed();
 
         public static string PrettyTotalVolumePerformance(this Node info) =>
-            info.TotalVolumePerformancebps < 0
+            info.TotalVolumePerformanceIops < 0
                 ? null
                 : info.TotalVolumePerformancebps.ToSpeed();
     }
