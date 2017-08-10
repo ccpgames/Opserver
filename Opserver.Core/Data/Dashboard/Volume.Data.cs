@@ -14,30 +14,14 @@ namespace StackExchange.Opserver.Data.Dashboard
             public override double? Value => AvgDiskUsed;
         }
 
-        public class VolumeQueueLength : GraphPoint
-        {
-            public override long DateEpoch { get; set; }
-            public double AvgQueueLength { get; internal set; }
-
-            public override double? Value => AvgQueueLength;
-        }
-
-        public class VolumeLatency : GraphPoint
-        {
-            public override long DateEpoch { get; set; }
-            public double AvgSecPerTransfer { get; internal set; }
-
-            public override double? Value => AvgSecPerTransfer;
-        }
-
         public class VolumePerformanceUtilization : DoubleGraphPoint
         {
             public override long DateEpoch { get; set; }
-            public float? AvgReads { get; internal set; }
-            public float? AvgWrites { get; internal set; }
+            public float? ReadAvgBps { get; internal set; }
+            public float? WriteAvgBps { get; internal set; }
 
-            public override double? Value => AvgReads;
-            public override double? BottomValue => AvgWrites;
+            public override double? Value => ReadAvgBps;
+            public override double? BottomValue => WriteAvgBps;
         }
 
         /// <summary>

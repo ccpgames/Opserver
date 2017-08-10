@@ -23,9 +23,9 @@ namespace StackExchange.Opserver.Models
     {
         public static string PercentFreeSpace(this Volume vol) => (100 - vol.PercentUsed)?.ToString("n0") + "% Free";
 
-        public static string PrettyRead(this Volume i) => $"{i.ReadsPerSec ?? 0} IOPS";
+        public static string PrettyRead(this Volume i) => i.ReadBps?.ToSpeed();
 
-        public static string PrettyWrite(this Volume i) => $"{i.ReadsPerSec ?? 0} IOPS";
+        public static string PrettyWrite(this Volume i) => i.WriteBps?.ToSpeed();
     }
 
     public static class InterfaceExtensionMethods

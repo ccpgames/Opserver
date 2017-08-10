@@ -28,10 +28,10 @@
                     @i.IconSpan()
                     @i.PrettyName
                 </td>
-                <td data-val="@(i.ReadsPerSec?.ToString("F0"))">@i.PrettyRead()</td>
-                <td data-val="@(i.ReadsPerSec?.ToString("F0"))">@Graph(i, "read")</td>
-                <td data-val="@(i.WritesPerSec?.ToString("F0"))">@i.PrettyWrite()</td>
-                <td data-val="@(i.WritesPerSec?.ToString("F0"))">@Graph(i, "write")</td>
+                <td data-val="@(i.ReadBps?.ToString("F0"))">@i.PrettyRead()</td>
+                <td data-val="@(i.ReadBps?.ToString("F0"))">@Graph(i, "read")</td>
+                <td data-val="@(i.WriteBps?.ToString("F0"))">@i.PrettyWrite()</td>
+                <td data-val="@(i.WriteBps?.ToString("F0"))">@Graph(i, "write")</td>
             </tr>
         }
     </tbody>
