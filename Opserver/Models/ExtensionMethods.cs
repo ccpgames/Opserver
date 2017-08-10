@@ -17,6 +17,9 @@ namespace StackExchange.Opserver.Models
     {
         public static string ToSpeed(this float bps, string unit = "b") =>
             bps < 1 ? "0 b/s" : $"{bps.ToSize(unit)}/s";
+
+        public static string ToSpeed(this double bps, string unit = "b") =>
+            bps < 1 ? "0 b/s" : $"{bps.ToSize(unit)}/s";
     }
 
     public static class VolumeExtensionMethods

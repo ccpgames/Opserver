@@ -323,8 +323,8 @@ Select DateDiff(s, '1970-01-01', itd.DateTime) as DateEpoch,
         {
             const string allSql = @"
 Select DateDiff(s, '1970-01-01', vp.DateTime) as DateEpoch,
-       Sum(vp.WriteAvgBps) WriteAvgBps,
-       Sum(vp.ReadAvgBps) ReadAvgBps
+       Sum(vp.AvgDiskWrites) WriteAvgBps,
+       Sum(vp.AvgDiskReads) ReadAvgBps
   From VolumePerformance vp
  Where vp.VolumeID In @Ids
    And {dateRange}
@@ -364,8 +364,8 @@ Select DateDiff(s, '1970-01-01', vp.DateTime) as DateEpoch,
         {
             const string allSql = @"
 Select DateDiff(s, '1970-01-01', vp.DateTime) as DateEpoch,
-       Sum(vp.WriteAvgBps) WriteAvgBps,
-       Sum(vp.ReadAvgBps) ReadAvgBps
+       Sum(vp.AvgDiskWrites) WriteAvgBps,
+       Sum(vp.AvgDiskReads) ReadAvgBps
   From VolumePerformance vp
  Where vp.VolumeID = @Id
    And {dateRange}
