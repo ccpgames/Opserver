@@ -19,9 +19,6 @@ namespace StackExchange.Opserver.Models
     {
         public static string ToSpeed(this float bps, string unit = "b") =>
             bps < 1 ? "0 b/s" : $"{bps.ToSize(unit)}/s";
-
-        public static string ToSpeed(this double bps, string unit = "b") =>
-            bps < 1 ? "0 b/s" : $"{bps.ToSize(unit)}/s";
     }
 
     public static class VolumeExtensionMethods
@@ -63,8 +60,8 @@ namespace StackExchange.Opserver.Models
         public static MonitorStatus MemoryMonitorStatus(this Node info)
         {
             if (!info.PercentMemoryUsed.HasValue) return MonitorStatus.Unknown;
-            if (info.MemoryCriticalPercent > 0 && info.PercentMemoryUsed > (float)info.MemoryCriticalPercent) return MonitorStatus.Critical;
-            if (info.MemoryWarningPercent > 0 && info.PercentMemoryUsed > (float)info.MemoryWarningPercent) return MonitorStatus.Warning;
+            if (info.MemoryCriticalPercent > 0 && info.PercentMemoryUsed > (float) info.MemoryCriticalPercent) return MonitorStatus.Critical;
+            if (info.MemoryWarningPercent > 0 && info.PercentMemoryUsed > (float) info.MemoryWarningPercent) return MonitorStatus.Warning;
             return MonitorStatus.Good;
         }
 
