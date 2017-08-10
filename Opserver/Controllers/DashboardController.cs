@@ -6,6 +6,8 @@ using Jil;
 using StackExchange.Opserver.Data.Dashboard;
 using StackExchange.Opserver.Models;
 using StackExchange.Opserver.Views.Dashboard;
+using System;
+using System.Collections.Generic;
 
 namespace StackExchange.Opserver.Controllers
 {
@@ -16,17 +18,22 @@ namespace StackExchange.Opserver.Controllers
         public override TopTab TopTab => new TopTab("Dashboard", nameof(Dashboard), this, 0);
 
         [Route("dashboard")]
-        public ActionResult Dashboard(string filter)
+        public ActionResult Dashboard(string q)
         {
             var vd = new DashboardModel
-                {
-                    Nodes = DashboardModule.AllNodes.ToList(),
-                    ErrorMessages = DashboardModule.ProviderExceptions.ToList(),
-                    Filter = filter,
-                    IsStartingUp = DashboardModule.AnyDoingFirstPoll
-                };
+            {
+                Nodes = GetNodes(q),
+                ErrorMessages = DashboardModule.ProviderExceptions.ToList(),
+                Filter = q,
+                IsStartingUp = DashboardModule.AnyDoingFirstPoll
+            };
             return View(Current.IsAjaxRequest ? "Dashboard.Table" : "Dashboard", vd);
         }
+
+        private List<Node> GetNodes(string search) =>
+            search.HasValue()
+            ? DashboardModule.AllNodes.Where(n => n.SearchString?.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) > -1).ToList()
+            : DashboardModule.AllNodes.ToList();
 
         [Route("dashboard/json")]
         public ActionResult DashboardJson()
@@ -48,10 +55,10 @@ namespace StackExchange.Opserver.Controllers
                     Search = n.SearchString,
                     Name = n.PrettyName,
                     Label = n.IsVM ? "Virtual Machine hosted on " + n.VMHost.PrettyName + " " : null + "Last Updated:" + n.LastSync?.ToRelativeTime(),
-                    AppText = n.ApplicationCPUTextSummary(),
+                    AppText = n.ApplicationCPUTextSummary,
                     CpuStatus = n.CPUMonitorStatus().RawClass(),
                     CPU = n.CPULoad,
-                    AppMemory = n.ApplicationMemoryTextSummary().Nullify(),
+                    AppMemory = n.ApplicationMemoryTextSummary.Nullify(),
                     MemStatus = n.MemoryMonitorStatus().RawClass().Nullify(),
                     MemPercent = n.PercentMemoryUsed > 0 ? n.PercentMemoryUsed : null,
                     MemText = $"{n.PrettyMemoryUsed()} / {n.PrettyTotalMemory()}({n.PercentMemoryUsed?.ToString("n2")}%)",

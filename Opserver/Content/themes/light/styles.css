@@ -1,6 +1,6 @@
 ﻿/*!
- * Bootstrap v3.3.5 (http://getbootstrap.com)
- * Copyright 2011-2015 Twitter, Inc.
+ * Bootstrap v3.3.7 (http://getbootstrap.com)
+ * Copyright 2011-2016 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
@@ -1766,6 +1766,10 @@ output {
 .form-control::-webkit-input-placeholder {
   color: rgba(78, 93, 108, 0.2);
 }
+.form-control::-ms-expand {
+  border: 0;
+  background-color: transparent;
+}
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
@@ -2172,7 +2176,7 @@ select[multiple].input-lg {
 }
 @media (min-width: 768px) {
   .form-horizontal .form-group-lg .control-label {
-    padding-top: 22.3333328px;
+    padding-top: 17px;
     font-size: 19px;
   }
 }
@@ -2181,6 +2185,10 @@ select[multiple].input-lg {
     padding-top: 9px;
     font-size: 12px;
   }
+}
+.form-horizontal .form-group-sm .checkbox,
+.form-horizontal .form-group-sm .radio {
+  padding-top: 9px;
 }
 .btn {
   display: inline-block;
@@ -2997,13 +3005,15 @@ tbody.collapse.in {
 }
 .btn-group-vertical > .btn:first-child:not(:last-child) {
   border-top-right-radius: 0;
+  border-top-left-radius: 0;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 .btn-group-vertical > .btn:last-child:not(:first-child) {
-  border-bottom-left-radius: 0;
   border-top-right-radius: 0;
   border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .btn-group-vertical > .btn-group:not(:first-child):not(:last-child) > .btn {
   border-radius: 0;
@@ -3059,6 +3069,9 @@ tbody.collapse.in {
   float: left;
   width: 100%;
   margin-bottom: 0;
+}
+.input-group .form-control:focus {
+  z-index: 3;
 }
 .input-group-lg > .form-control,
 .input-group-lg > .input-group-addon,
@@ -3970,7 +3983,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > li > span:hover,
 .pagination > li > a:focus,
 .pagination > li > span:focus {
-  z-index: 3;
+  z-index: 2;
   color: #008cba;
   background-color: #eeeeee;
   border-color: transparent;
@@ -3981,7 +3994,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  z-index: 2;
+  z-index: 3;
   color: #fff;
   background-color: #008cba;
   border-color: transparent;
@@ -4203,6 +4216,8 @@ a.badge:focus {
 .container .jumbotron,
 .container-fluid .jumbotron {
   border-radius: 0;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .jumbotron .container {
   max-width: 100%;
@@ -5149,7 +5164,6 @@ button.close {
 .modal-header {
   padding: 10px;
   border-bottom: 1px solid #e5e5e5;
-  min-height: 11.3px;
 }
 .modal-header .close {
   margin-top: -2px;
@@ -5541,6 +5555,7 @@ button.close {
   color: #fff;
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0);
 }
 .carousel-control.left {
   background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
@@ -5650,16 +5665,16 @@ button.close {
   .carousel-control .icon-next {
     width: 30px;
     height: 30px;
-    margin-top: -15px;
+    margin-top: -10px;
     font-size: 30px;
   }
   .carousel-control .glyphicon-chevron-left,
   .carousel-control .icon-prev {
-    margin-left: -15px;
+    margin-left: -10px;
   }
   .carousel-control .glyphicon-chevron-right,
   .carousel-control .icon-next {
-    margin-right: -15px;
+    margin-right: -10px;
   }
   .carousel-caption {
     left: 20%;
@@ -5698,6 +5713,8 @@ button.close {
 .pager:after,
 .panel-body:before,
 .panel-body:after,
+.modal-header:before,
+.modal-header:after,
 .modal-footer:before,
 .modal-footer:after {
   content: " ";
@@ -5717,6 +5734,7 @@ button.close {
 .navbar-collapse:after,
 .pager:after,
 .panel-body:after,
+.modal-header:after,
 .modal-footer:after {
   clear: both;
 }
@@ -5748,7 +5766,7 @@ button.close {
   border: 0;
 }
 .hidden {
-  display: none;
+  display: none !important;
 }
 .affix {
   position: fixed;
@@ -9330,11 +9348,15 @@ svg .stroke-muted.filled {
   position: absolute;
   background: #fff;
   width: calc(90%);
-  left: 5px;
+  left: 52px;
+  margin-top: -19px;
   padding: 10px;
   z-index: 2;
   font-size: 15px;
   box-shadow: 3px 3px 10px #555555;
+}
+.error-preview-popup .title-prefix {
+  color: #6f6f6f;
 }
 .error-preview-popup h6 {
   margin-top: 0;
@@ -9345,6 +9367,114 @@ svg .stroke-muted.filled {
 }
 .error-preview-popup p:last-child {
   margin-bottom: 0;
+}
+.error-info pre {
+  padding: 0.5em;
+  overflow: auto;
+  line-height: 1.1;
+}
+.error-info pre code {
+  font-size: 0.8em;
+  white-space: pre;
+}
+.error-info pre.stack-row {
+  white-space: nowrap;
+}
+.error-info pre.stack {
+  background-color: #fefbec;
+  border: solid 1px #f5f5f5;
+}
+.error-info pre.stack.table code {
+  display: table;
+}
+.error-info pre.stack.table .stack.stack-row {
+  display: table-row;
+}
+.error-info pre.stack.table .stack.leadIn,
+.error-info pre.stack.table .stack.type,
+.error-info pre.stack.table .stack.method-section,
+.error-info pre.stack.table .stack.source-section {
+  display: table-cell;
+}
+.error-info pre.stack.table .stack.misc {
+  display: none;
+}
+.error-info pre.stack.table .stack.method-section .misc {
+  display: normal;
+}
+.error-info pre.command {
+  background-color: #eee;
+  padding: 0;
+  margin-top: 0;
+}
+.error-info .stack.async {
+  opacity: 0.6;
+  display: none;
+}
+.error-info .stack.leadin,
+.error-info .stack.file,
+.error-info .stack.line-prefix,
+.error-info .stack.path,
+.error-info .stack.dot {
+  color: #bbb;
+}
+.error-info .stack.async-tag {
+  color: #d14;
+  font-weight: bold;
+}
+.error-info .stack.async-tag:before {
+  content: "(";
+}
+.error-info .stack.async-tag:after {
+  content: ")";
+}
+.error-info .stack.type {
+  color: #006696;
+}
+.error-info .stack.misc,
+.error-info .stack.parens,
+.error-info .stack.generic-type {
+  color: #444;
+}
+.error-info .stack.method {
+  color: #1fad83;
+}
+.error-info .stack.paramType {
+  color: #147FCC;
+}
+.error-info .stack.paramName {
+  color: #885D3B;
+}
+.error-info pre.stack.dark {
+  background-color: #2f3640;
+  border: solid 1px #f5f5f5;
+}
+.error-info pre.stack.dark .stack.leadin,
+.error-info pre.stack.dark .stack.path,
+.error-info pre.stack.dark .stack.line-prefix,
+.error-info pre.stack.dark .stack.dot {
+  color: #bbb;
+}
+.error-info pre.stack.dark .stack.async-tag {
+  color: #d14;
+}
+.error-info pre.stack.dark .stack.type {
+  color: #8e9caf;
+}
+.error-info pre.stack.dark .stack.misc,
+.error-info pre.stack.dark .stack.parens,
+.error-info pre.stack.dark .stack.line,
+.error-info pre.stack.dark .stack.generic-type {
+  color: #e6e9ed;
+}
+.error-info pre.stack.dark .stack.method {
+  color: #4fc1e9;
+}
+.error-info pre.stack.dark .stack.paramType {
+  color: #e6e9ed;
+}
+.error-info pre.stack.dark .stack.paramName {
+  color: #ed5565;
 }
 /* SQL Server Query Plans */
 .qp-tt {
@@ -9756,6 +9886,9 @@ svg .stroke-muted.filled {
 .navbar-left > a.active:hover {
   text-decoration: none;
 }
+input.loading {
+  background: #ffffff url("data:image/svg+xml;utf8,<svg width='32px' height='20px' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid'><g transform='translate(25 50)'><circle cx='0' cy='0' r='7' fill='#2fa6c4' transform='scale(0.00340694 0.00340694)'><animateTransform attributeName='transform' type='scale' begin='-0.3333333333333333s' calcMode='spline' keySplines='0.3 0 0.7 1;0.3 0 0.7 1' values='0;1;0' keyTimes='0;0.5;1' dur='1s' repeatCount='indefinite'></animateTransform></circle></g><g transform='translate(50 50)'><circle cx='0' cy='0' r='7' fill='#2fa6c4' transform='scale(0.31409 0.31409)'><animateTransform attributeName='transform' type='scale' begin='-0.16666666666666666s' calcMode='spline' keySplines='0.3 0 0.7 1;0.3 0 0.7 1' values='0;1;0' keyTimes='0;0.5;1' dur='1s' repeatCount='indefinite'></animateTransform></circle></g><g transform='translate(75 50)'><circle cx='0' cy='0' r='7' fill='#2fa6c4' transform='scale(0.774545 0.774545)'><animateTransform attributeName='transform' type='scale' begin='0s' calcMode='spline' keySplines='0.3 0 0.7 1;0.3 0 0.7 1' values='0;1;0' keyTimes='0;0.5;1' dur='1s' repeatCount='indefinite'></animateTransform></circle></g></svg>") right no-repeat;
+}
 a:focus {
   text-decoration: none;
 }
@@ -9867,6 +10000,9 @@ h6.page-header {
 }
 .text-center .sk-wave {
   margin: 0 auto;
+}
+.form-group-sm {
+  margin-bottom: 0;
 }
 .form-group-sm select.form-control {
   padding: 0;

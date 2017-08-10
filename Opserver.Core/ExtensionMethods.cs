@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using StackExchange.Opserver.Data;
 using StackExchange.Opserver.Helpers;
-using StackExchange.Profiling;
 using StackExchange.Redis;
+using System.Text;
 
 namespace StackExchange.Opserver
 {
@@ -21,7 +19,7 @@ namespace StackExchange.Opserver
     /// </summary>
     public static partial class ExtensionMethods
     {
-        public static readonly string ExceptionLogPrefix = "ErrorLog-";
+        public const string ExceptionLogPrefix = "ErrorLog-";
 
         /// <summary>
         /// Answers true if this String is either null or empty.
@@ -604,5 +602,7 @@ namespace StackExchange.Opserver
             var value = bytes / Math.Pow(kiloSize, pow);
             return value.ToString(pow == 0 ? "F0" : "F" + precision.ToString()) + " " + Units[(int)pow] + unit;
         }
+
+        internal static StringBuilder Pipend(this StringBuilder sb, string value) => sb.Append("|").Append(value);
     }
 }

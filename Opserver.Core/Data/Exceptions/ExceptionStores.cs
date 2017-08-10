@@ -32,14 +32,14 @@ namespace StackExchange.Opserver.Data.Exceptions
                 if (ExceptionsModule.Stores.Any(s => s.MonitorStatus == MonitorStatus.Critical))
                     return MonitorStatus.Critical;
 
-                if (settings.CriticalCount > 0 && total > settings.CriticalCount)
+                if (settings.CriticalCount.HasValue && total > settings.CriticalCount)
                     return MonitorStatus.Critical;
-                if (settings.CriticalRecentCount > 0 && recent > settings.CriticalRecentCount)
+                if (settings.CriticalRecentCount.HasValue && recent > settings.CriticalRecentCount)
                     return MonitorStatus.Critical;
 
-                if (settings.WarningCount > 0 && total > settings.WarningCount)
+                if (settings.WarningCount.HasValue && total > settings.WarningCount)
                     return MonitorStatus.Warning;
-                if (settings.WarningRecentCount > 0 && recent > settings.WarningRecentCount)
+                if (settings.WarningRecentCount.HasValue && recent > settings.WarningRecentCount)
                     return MonitorStatus.Warning;
 
                 return MonitorStatus.Good;
@@ -187,19 +187,20 @@ namespace StackExchange.Opserver.Data.Exceptions
             }
         }
 
-        public static async Task<List<Error>> GetAllErrors(string group = null, string app = null, int maxPerApp = 5000, ExceptionSorts sort = ExceptionSorts.TimeDesc)
+        public static async Task<List<Error>> GetAllErrors(string group = null, string app = null, int? maxPerApp = null, ExceptionSorts sort = ExceptionSorts.TimeDesc)
         {
             using (MiniProfiler.Current.Step("GetAllErrors() - All Stores" + (group.HasValue() ? " (group:" + group + ")" : "") + (app.HasValue() ? " (app:" + app + ")" : "")))
             {
+                maxPerApp = maxPerApp ?? Current.Settings.Exceptions.PerAppCacheCount;
                 var stores = ExceptionsModule.Stores;
                 IEnumerable <Error> allErrors;
                 if (stores.Count == 1)
                 {
-                    allErrors = await stores[0].GetErrorSummary(maxPerApp, group, app).ConfigureAwait(false);
+                    allErrors = await stores[0].GetErrorSummary(maxPerApp.Value, group, app).ConfigureAwait(false);
                 }
                 else
                 {
-                    var tasks = stores.Select(s => s.GetErrorSummary(maxPerApp, group, app));
+                    var tasks = stores.Select(s => s.GetErrorSummary(maxPerApp.Value, group, app));
                     var taskResults = await Task.WhenAll(tasks).ConfigureAwait(false);
                     var combined = new List<Error>();
                     foreach (var r in taskResults)

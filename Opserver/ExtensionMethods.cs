@@ -11,6 +11,7 @@ using StackExchange.Opserver.Data.SQL;
 using StackExchange.Opserver.Helpers;
 using StackExchange.Opserver.Views.Shared;
 using UnconstrainedMelody;
+using System.Text;
 
 namespace StackExchange.Opserver
 {
@@ -30,6 +31,14 @@ namespace StackExchange.Opserver
         /// </summary>
         /// <param name="s">The string to convert to title case.</param>
         public static string ToTitleCase(this string s) => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s);
+
+        /// <summary>
+        /// Appends a <see cref="string"/>, HTML encoding the contents first.
+        /// </summary>
+        /// <param name="sb">The <see cref="StringBuilder"/> to append to.</param>
+        /// <param name="s">The <see cref="string"/> to encode and append.</param>
+        /// <returns>The original <see cref="StringBuilder"/> for chaining.</returns>
+        public static StringBuilder AppendHtmlEncode(this StringBuilder sb, string s) => sb.Append(s.HtmlEncode());
 
         /// <summary>
         /// Encodes an object as JSON for direct use without quote crazy
@@ -499,30 +508,33 @@ namespace StackExchange.Opserver
                                         string searchText,
                                         string searchValue = null,
                                         string url = null,
-                                        Dictionary<string, string> addParams = null)
+                                        Dictionary<string, string> addParams = null,
+                                        string queryParam = "q")
         {
             page.ViewData[ViewDataKeys.TopBoxOptions] = new TopBoxOptions
-                {
-                    SearchOnly = true,
-                    SearchText = searchText,
-                    SearchValue = searchValue,
-                    SearchParams = addParams,
-                    Url = url
-                };
+            {
+                SearchOnly = true,
+                SearchText = searchText,
+                SearchValue = searchValue,
+                SearchParams = addParams,
+                QueryParam = queryParam,
+                Url = url
+            };
         }
 
-        public static void SetTopNodes(this WebViewPage page, IEnumerable<ISearchableNode> nodes,
+        public static void SetTopNodes(this WebViewPage page,
+                                       IEnumerable<ISearchableNode> nodes,
                                        string searchText,
                                        ISearchableNode currentNode = null,
                                        string url = null)
         {
             page.ViewData[ViewDataKeys.TopBoxOptions] = new TopBoxOptions
-                {
-                    AllNodes = nodes,
-                    CurrentNode = currentNode,
-                    SearchText = searchText,
-                    Url = url
-                };
+            {
+                AllNodes = nodes,
+                CurrentNode = currentNode,
+                SearchText = searchText,
+                Url = url
+            };
         }
     }
 

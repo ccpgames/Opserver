@@ -429,21 +429,11 @@ Status.UI = (function () {
 Status.Dashboard = (function () {
     
     function applyFilter(filter) {
-        Status.Dashboard.options.filter = filter = (filter || '').toLowerCase();
-        if (!filter) {
-            $('[data-search]').closest('tbody').andSelf().removeClass('hidden');
-            return;
-        }
-        $('[data-search]').each(function () {
-            var show = $(this).data('search').indexOf(filter) > -1;
-            $(this).toggleClass('hidden', !show);
-        });
-        $('[data-search]').closest('tbody').each(function () {
-            var show = $('td:visible', this).length;
-            $(this).toggleClass('hidden', !show);
-        });
-        // TODO: Look at children cases, e.g. search for a category where children don't match
-        // Thoughts: they should include the category in their search strings and be covered
+        Status.Dashboard.options.filter = filter = (filter || '');
+        window.history.replaceState({ 'q': filter }, document.title, Status.options.rootPath + 'dashboard' + (filter? '?q=' + encodeURIComponent(filter) : ''));
+        $('.js-filter').addClass('loading');
+        Status.refresh.run('Dashboard');
+        return;        
     }
 
     function init(options) {
@@ -475,21 +465,23 @@ Status.Dashboard = (function () {
                             $(this).replaceWith(match);
                         }
                     });
-                    if (Status.Dashboard.options.filter)
-                        applyFilter(Status.Dashboard.options.filter);
                     if (Status.Dashboard.options.afterRefresh)
                         Status.Dashboard.options.afterRefresh();
+                    $('.js-filter').removeClass('loading');
                 }).fail(function () {
                     console.log('Failed to refresh', this, arguments);
                 });
             }, Status.Dashboard.options.refresh * 1000);
         }
-        
+
+        var filterTimer;
         $(document).on('keyup', '.js-filter', function () {
-            applyFilter(this.value);
+            clearTimeout(filterTimer);
+            var filter = this.value;
+            filterTimer = setTimeout(function () {
+                applyFilter(filter);
+            }, 300);
         });
-        if (Status.Dashboard.options.filter)
-            $('.js-filter').keyup();
     }
 
     return {
@@ -609,35 +601,29 @@ Status.NodeSearch = (function () {
                 }
             }, 0);
         });
-            //.autocomplete(options.nodes, {
-            //    max: 500,
-            //    minChars: 0,
-            //    matchContains: true,
-            //    delay: 50,
-            //    inputClass: "autocomplete-input",
-            //    resultsClass: "autocomplete-results",
-            //    loadingClass: "autocomplete-loading",
-            //    formatItem: function (row) {
-            //        return '<span class="status-icon ' + row.sClass + ' icon" data-host="' + row.node + '">●</span> <span class="text-muted">' + row.category + ':</span> <span class="' + row.sClass + '">' + row.name + '</span>';
-            //    },
-            //    formatResult: function (row) { return row.node; },
-            //    formatMatch: function (row) { return row.category + ': ' + row.node; }
-            //}).result(function (e, data) {
-            //    $(this).addClass('left-icon ' + data.sClass).closest('form').submit();
-            //}).keydown(function (e) {
-            //    return e.keyCode !== 13;
-            //});
         var ai = ac.autocomplete({
             minLength: 0,
             delay: 25,
-            source: options.nodes,
+            source: options.searchUrl
+                ? function (request, response) {
+                    $.ajax(options.searchUrl, {
+                        dataType: "jsonp",
+                        data: { q: request.term },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                }
+                : options.nodes,
             appendTo: ac.parent(),
             messages: {
                 noResults: '',
                 results: function () { }
             },
             select: function (event, ui) {
-                $(this).val(ui.item.value).closest('form').submit();
+                if (options.nodes) {
+                    $(this).val(ui.item.value).closest('form').submit();
+                }
             }
         }).autocomplete('instance');
         ai._renderMenu = function (ul, items) {
@@ -907,15 +893,13 @@ Status.Redis = (function () {
                 innerRun();
             }
         }
-        $(document).on('change', '.js-redis-role-new-master', function () {
-            $('button.js-redis-role-slave').prop('disabled', this.value.length === 0);
-        }).on('click', '.js-instance-action', function (e) {
+        $(document).on('click', '.js-instance-action', function (e) {
             e.preventDefault();
             runAction(this);
-        }).on('click', '.js-redis-role-slave', function (e) {
+        }).on('click', '.js-redis-new-master', function (e) {
             var modal = $(this).closest('.js-redis-actions'),
                 node = modal.data('node'),
-                newMaster = $('[name=newMaster]', modal).val();
+                newMaster = $(this).data('new-master');
             e.preventDefault();
             runAction(this, {
                 confirmMessage: 'Are you sure you want make ' + node + ' a slave of ' + newMaster + '?',
@@ -1267,32 +1251,54 @@ Status.Exceptions = (function () {
 
         /* Error previews */
         if (options.enablePreviews) {
-            var previewTimer = 0;
+            var activePreview,
+                lastId,
+                previewTimer = 0;
+
+            function clearPreview(parent) {
+                lastId = null;
+                $('.error-preview-popup', parent).fadeOut(125, function () { $(this).remove(); });
+            }
+
             $('.js-content').on({
                 mouseenter: function (e) {
-                    if ($(e.target).closest('.js-error td:nth-child(4)').length) {
-                        var jThis = $(this).find('.js-exception-link'),
-                            url = jThis.attr('href').replace('/detail', '/preview');
+                    var jThis = $(this),
+                        url = jThis.find('a').attr('href').replace('/detail', '/preview'),
+                        id = jThis.closest('tr').data('id');
 
+                    if (lastId == id) {
+                        // We're moved between eye and popup
+                        // Due to position: absolute, mouse events fire here, unfortunately
                         clearTimeout(previewTimer);
-                        previewTimer = setTimeout(function() {
-                                $.get(url,
-                                    function(resp) {
-                                        var sane = $(resp).filter('.error-preview');
-                                        if (!sane.length) return;
-
-                                        $('.error-preview-popup').fadeOut(125, function() { $(this).remove(); });
-                                        var errDiv = $('<div class="error-preview-popup" />').append(resp);
-                                        errDiv.appendTo(jThis.parent()).fadeIn('fast');
-                                    });
-                            }, 600);
+                        return;
+                    } else {
+                        lastId = id;
                     }
+                    if (activePreview) {
+                        activePreview.abort();
+                    }
+
+                    jThis.find('.fa').addClass('icon-rotate-flip');
+                    activePreview = $.get(url, function (resp) {
+                        $('.js-preview .fa.icon-rotate-flip').removeClass('icon-rotate-flip');
+                        if (!$(resp).filter('.error-preview').length) return;
+                        
+                        var errDiv = $('<div class="error-preview-popup" />').append(resp);
+                        errDiv.appendTo(jThis).fadeIn('fast');
+                    });
                 },
-                mouseleave: function () {
-                    clearTimeout(previewTimer);
-                    $('.error-preview-popup', this).fadeOut(125, function () { $(this).remove(); });
+                mouseleave: function(e) {
+                    if (activePreview) {
+                        activePreview.abort();
+                        $('.js-preview .fa.icon-rotate-flip').removeClass('icon-rotate-flip');
+                    }
+                    var parent = this;
+                    // hack due to position: absolute firing leave even on the child popup
+                    previewTimer = setTimeout(function () {
+                        clearPreview(parent);
+                    }, 25);
                 }
-            }, '.js-exceptions tbody tr');
+            }, '.js-exceptions .js-preview');
         }
 
         /* Error detail handlers*/
