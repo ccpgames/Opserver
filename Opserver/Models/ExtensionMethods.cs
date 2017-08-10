@@ -6,9 +6,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using System.Xml.Xsl;
+using StackExchange.Opserver;
 using StackExchange.Opserver.Data;
 using StackExchange.Opserver.Data.Dashboard;
 using StackExchange.Opserver.Data.SQL;
+using StackExchange.Opserver.Helpers;
 using UnconstrainedMelody;
 
 namespace StackExchange.Opserver.Models
@@ -16,9 +18,6 @@ namespace StackExchange.Opserver.Models
     public static class ExtensionMethods
     {
         public static string ToSpeed(this float bps, string unit = "b") =>
-            bps < 1 ? "0 b/s" : $"{bps.ToSize(unit)}/s";
-
-        public static string ToSpeed(this double bps, string unit = "b") =>
             bps < 1 ? "0 b/s" : $"{bps.ToSize(unit)}/s";
     }
 
@@ -61,8 +60,8 @@ namespace StackExchange.Opserver.Models
         public static MonitorStatus MemoryMonitorStatus(this Node info)
         {
             if (!info.PercentMemoryUsed.HasValue) return MonitorStatus.Unknown;
-            if (info.MemoryCriticalPercent > 0 && info.PercentMemoryUsed > (float)info.MemoryCriticalPercent) return MonitorStatus.Critical;
-            if (info.MemoryWarningPercent > 0 && info.PercentMemoryUsed > (float)info.MemoryWarningPercent) return MonitorStatus.Warning;
+            if (info.MemoryCriticalPercent > 0 && info.PercentMemoryUsed > (float) info.MemoryCriticalPercent) return MonitorStatus.Critical;
+            if (info.MemoryWarningPercent > 0 && info.PercentMemoryUsed > (float) info.MemoryWarningPercent) return MonitorStatus.Warning;
             return MonitorStatus.Good;
         }
 
