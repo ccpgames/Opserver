@@ -8,7 +8,6 @@ using StackExchange.Opserver.Helpers;
 using StackExchange.Opserver.Models;
 using StackExchange.Opserver.Views.Exceptions;
 using System.Threading.Tasks;
-using Microsoft.Ajax.Utilities;
 using StackExchange.Opserver.Data.Jira;
 using static StackExchange.Opserver.Data.Exceptions.ExceptionStores;
 
@@ -130,7 +129,7 @@ namespace StackExchange.Opserver.Controllers
             if (q.IsNullOrEmpty())
                 return RedirectToAction(nameof(Exceptions), new { group, log });
 
-            var errors = await FindErrorsAsync(q, group, log, includeDeleted: showDeleted, max: 10000, sort: sort.Value).ConfigureAwait(false);
+            var errors = await FindErrorsAsync(q, group, log, max: 10000, includeDeleted: showDeleted, sort: sort.Value).ConfigureAwait(false);
             if (errors.Count == 0 && !showDeleted)
             {
                 // If we didn't find any current errors, go ahead and search deleted as well
@@ -277,7 +276,7 @@ namespace StackExchange.Opserver.Controllers
             var jiraClient = new JiraClient(JiraSettings);
             var result = await jiraClient.CreateIssueAsync(action, e, user == null ? "" : user.AccountName).ConfigureAwait(false);
 
-            if (result.Key.IsNullOrWhiteSpace())
+            if (string.IsNullOrWhiteSpace(result.Key))
             {
                 return Json(new
                 {
