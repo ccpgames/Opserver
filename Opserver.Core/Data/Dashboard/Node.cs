@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using StackExchange.Opserver.Data.Dashboard.Providers;
 using System.Globalization;
@@ -225,7 +226,7 @@ namespace StackExchange.Opserver.Data.Dashboard
             }
         }
 
-        public TimeSpan? PollInterval => PollIntervalSeconds.HasValue ? TimeSpan.FromSeconds(PollIntervalSeconds.Value) : (TimeSpan?) null;
+        public TimeSpan? PollInterval => PollIntervalSeconds.HasValue ? TimeSpan.FromSeconds(PollIntervalSeconds.Value) : (TimeSpan?)null;
 
         // Interfaces, Volumes, Applications, and Services are set by the provider
         public List<Interface> Interfaces { get; internal set; }
