@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using StackExchange.Opserver.Data.Dashboard.Providers;
-using System.Globalization;
 
 namespace StackExchange.Opserver.Data.Dashboard
 {
@@ -224,7 +224,7 @@ namespace StackExchange.Opserver.Data.Dashboard
             }
         }
 
-        public TimeSpan? PollInterval => PollIntervalSeconds.HasValue ? TimeSpan.FromSeconds(PollIntervalSeconds.Value) : (TimeSpan?) null;
+        public TimeSpan? PollInterval => PollIntervalSeconds.HasValue ? TimeSpan.FromSeconds(PollIntervalSeconds.Value) : (TimeSpan?)null;
 
         // Interfaces, Volumes and Applications are set by the provider
         public List<Interface> Interfaces { get; internal set; }
@@ -286,7 +286,7 @@ namespace StackExchange.Opserver.Data.Dashboard
             {
                 if (_primaryInterfaces == null || (_primaryInterfaces.Count == 0 && Interfaces?.Count > 0))
                 {
-                    var pattern = Settings?.PrimaryInterfacePatternRegex;
+                    var pattern = Settings?.PrimaryInterfacePatternRegex ?? Category?.Settings?.PrimaryInterfacePatternRegex;
                     var dbInterfaces = Interfaces.Where(i => i.IsLikelyPrimary(pattern)).ToList();
                     _primaryInterfaces = (dbInterfaces.Count > 0
                         ? dbInterfaces.OrderBy(i => i.Name)
