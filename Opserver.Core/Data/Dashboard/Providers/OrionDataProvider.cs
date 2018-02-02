@@ -366,7 +366,7 @@ Select DateDiff(s, '1970-01-01', vp.DateTime) as DateEpoch,
        Sum(vp.AvgDiskWrites) WriteAvgBps,
        Sum(vp.AvgDiskReads) ReadAvgBps
   From VolumePerformance vp
- Where vp.VolumeID = @Id
+ Where vp.VolumeID = @id
    And {dateRange}
  Group By vp.DateTime
  Order By vp.DateTime
@@ -381,11 +381,11 @@ Select DateDiff(s, '1970-01-01', vp.DateTime) as DateEpoch,
 		       vp.AvgDiskReads ReadAvgBps,
 		       Row_Number() Over(Order By vp.DateTime) RowNumber
           From VolumePerformance vp
-         Where vp.VolumeID = @Id
+         Where vp.VolumeID = @id
            And {dateRange}) vp
  Where vp.RowNumber % ((Select Count(*) + @intervals
 						   From VolumePerformance vp
-					      Where vp.VolumeID = @Id
+					      Where vp.VolumeID = @id
                             And {dateRange})/@intervals) = 0
  Group By vp.DateTime
  Order By vp.DateTime";
@@ -428,7 +428,7 @@ Select DateDiff(s, '1970-01-01 00:00:00', itd.DateTime) as DateEpoch,
        itd.In_Averagebps InAvgBps,
        itd.Out_Averagebps OutAvgBps
   From InterfaceTraffic itd
- Where itd.InterfaceID = @Id
+ Where itd.InterfaceID = @id
    And {dateRange}
  Order By itd.DateTime
 ";
@@ -442,11 +442,11 @@ Select DateDiff(s, '1970-01-01 00:00:00', itd.DateTime) as DateEpoch,
 		       itd.Out_Averagebps OutAvgBps,
 		       Row_Number() Over(Order By itd.DateTime) RowNumber
           From InterfaceTraffic itd
-         Where itd.InterfaceID = @Id
+         Where itd.InterfaceID = @id
            And {dateRange}) itd
  Where itd.RowNumber % ((Select Count(*) + @intervals
 						   From InterfaceTraffic itd
-					      Where itd.InterfaceID = @Id
+					      Where itd.InterfaceID = @id
                             And {dateRange})/@intervals) = 0
  Order By itd.DateTime";
 
