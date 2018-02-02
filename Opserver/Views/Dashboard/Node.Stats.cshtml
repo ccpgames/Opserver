@@ -25,17 +25,17 @@
         $('#memory-container').memoryGraph({ id: '@Model.Id' });
     });
 </script>
-@if (Model.Interfaces.Any())
+@if (Model.Interfaces?.Any() ?? false)
 {
     @Html.Partial("Node.Interfaces", Model)
 }
 
-@if (Model.Services.Any())
+@if (Model.Services?.Any() ?? false)
 {
     @Html.Partial("Node.Services", Model)
 }
 
-@if (Current.Settings.Dashboard.ShowVolumePerformance && Model.Volumes.Any())
+@if (Current.Settings.Dashboard.ShowVolumePerformance && (Model.Volumes?.Any() ?? false))
 {
     @Html.Partial("Node.Volumes", Model)
 }
