@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using StackExchange.Opserver.Data;
-using StackExchange.Profiling;
 using StackExchange.Opserver.Helpers;
+using StackExchange.Profiling;
 using StackExchange.Profiling.Mvc;
-using StackExchange.Profiling.Storage;
 
 namespace StackExchange.Opserver
 {
@@ -72,6 +71,8 @@ namespace StackExchange.Opserver
 
             // When settings change, reload the app pool
             Current.Settings.OnChanged += HttpRuntime.UnloadAppDomain;
+
+            PollingEngine.Configure(t => HostingEnvironment.QueueBackgroundWorkItem(_ => t()));
         }
 
         protected void Application_End()
@@ -113,7 +114,7 @@ namespace StackExchange.Opserver
         private static void GetCustomErrorData(Exception ex, Dictionary<string, string> data)
         {
             // everything below needs a context
-            if (Current.Context != null)
+            if (Current.Context != null && Current.User != null)
             {
                 data.Add("User", Current.User.AccountName);
                 data.Add("Roles", Current.User.RawRoles.ToString());

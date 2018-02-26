@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using StackExchange.Opserver.Helpers;
 
 namespace StackExchange.Opserver.SettingsProviders
 {
@@ -10,7 +11,6 @@ namespace StackExchange.Opserver.SettingsProviders
 
         public string Name { get; set; }
         public string Path { get; set; }
-        public string ConnectionString { get; set; }
 
         public event Action OnChanged;
 
@@ -26,14 +26,13 @@ namespace StackExchange.Opserver.SettingsProviders
         public SQLSettings SQL => GetSettings<SQLSettings>();
         public JiraSettings Jira => GetSettings<JiraSettings>();
 
-        public abstract T GetSettings<T>() where T : Settings<T>, new();
+        public abstract T GetSettings<T>() where T : ModuleSettings, new();
         public abstract T SaveSettings<T>(T settings) where T : class, new();
 
         protected SettingsProvider(SettingsSection settings)
         {
             Name = settings.Name;
             Path = settings.Path;
-            ConnectionString = settings.ConnectionString;
         }
 
         private static SettingsProvider _current;
@@ -44,7 +43,7 @@ namespace StackExchange.Opserver.SettingsProviders
             var section = ConfigurationManager.GetSection("Settings") as SettingsSection;
             if (section == null)
             {
-                throw new ConfigurationErrorsException("No settings section found in the config");
+                throw new OpserverConfigException("No settings section found in the config");
             }
             var provider = section.Provider;
             if (!provider.EndsWith("SettingsProvider")) provider += "SettingsProvider";
@@ -53,19 +52,12 @@ namespace StackExchange.Opserver.SettingsProviders
             var t = Type.GetType(provider, false);
             if (t == null)
             {
-                throw new ConfigurationErrorsException($"Could not resolve type '{section.Provider}' ('{provider}')");
+                throw new OpserverConfigException($"Could not resolve type '{section.Provider}' ('{provider}')");
             }
             var p = (SettingsProvider) Activator.CreateInstance(t, section);
             return p;
         }
 
         protected void SettingsChanged() => OnChanged?.Invoke();
-
-        protected void AddDirectoryWatcher()
-        {
-            var watcher = new FileSystemWatcher(Path);
-            watcher.Changed += (s, args) => SettingsChanged();
-            watcher.EnableRaisingEvents = true;
-        }
     }
 }

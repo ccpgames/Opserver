@@ -19,7 +19,7 @@
         $(document).on('click', '.database-row', function () {
             var dbName = $(this).data('dbname');
             if (dbName) {
-                window.location.hash = '#/db/' + dbName + '/tables';
+                window.location.hash = '#/db/' + encodeURIComponent(dbName) + '/tables';
             }
         });
         var header = $('.js-databases-table .category-row').detach();
@@ -60,7 +60,7 @@
         {
             var bkup = db.Backups?.FirstOrDefault();
             SQLNode.AGDatabaseReplica replica;
-                <tr class="database-row @db.RowClass()" data-dbname="@db.Name">
+                <tr class="database-row @db.RowClass()" data-dbname="@db.Name" role="button">
                     <td>
                         <i class="fa fa-database @DatabasesModel.GetDatabaseClass(db)" aria-hidden="true"></i>
                         @db.Name
@@ -70,15 +70,15 @@
                         }
                     </td>
                     <td class="@db.TextClass()">
-                        @db.State.GetDescription() <span class="text-muted">(@(((int)db.CompatibilityLevel).ToString()))</span>
+                        @db.State.AsString(EnumFormat.Description) <span class="text-muted">(@(((int)db.CompatibilityLevel).ToString()))</span>
                         @if (replicationInfo.TryGetValue(db.Name, out replica))
                         {
                             @replica.SynchronizationState.ToSpan()
                         }
                     </td>
-                    <td>@db.RecoveryModel.GetDescription()</td>
+                    <td>@db.RecoveryModel.AsString(EnumFormat.Description)</td>
                     <td class="@(db.LogReuseWait == LogReuseWaits.Nothing ? "text-muted" : null)">
-                        @db.LogReuseWait.GetDescription()
+                        @db.LogReuseWait.AsString(EnumFormat.Description)
                     </td>
                     @if (db.LogSizeMB.HasValue && db.LogSizeUsedMB.HasValue)
                     {
