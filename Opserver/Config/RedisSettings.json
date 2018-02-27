@@ -6,7 +6,7 @@
           "SSO Throttles": "SSO:[A-Za-z\\.]*:LoginThrottle",
           "SSO Country List": "SSO:[A-Za-z\\.]*:Countries",
           "SSO Internal Service Tokens": "SSO:[A-Za-z\\.]*:InternalServiceTokens",
-          "EVE Users": "SSO:[A-Za-z\\.]*:Users:EVE",
+          "EVE Users": "SSO:[A-Za-z\\.]*:Users:EVE:\\d*",
           "SSO Clients Authorizations": "SSO:[A-Za-z\\.]*:ClientAuthorization",
           "SSO Clients by Id": "SSO:[A-Za-z\\.]*:Client:Id",
           "SSO Clients by Name": "SSO:[A-Za-z\\.]*:Client:Name",
@@ -17,7 +17,8 @@
           "CIS Email Verification": "CIS:EmailVerification:[A-Z]*:\\d*",
           "CIS Email Verification (Old)": "CIS:EmailVerification:[A-Fa-f0-9]*",
           "CIS User Entitlements Collection": "CIS:Users:[A-Z]*:\\d*:Entitlements",
-          "CIS User Entitlement": "CIS:Users:[A-Z]*:\\d*:Entitlements:\\d*",
+          "CIS User Entitlement": "CIS:[A-Z]*:\\d*:Entitlements:\\d*",
+          "CIS EVE USers": "CIS:[A-Z]*:\\d*:Users:EVE:\\d*",
           "MailService Email Cache": "MailService:ValidateEmail:.*"
         }
       }
