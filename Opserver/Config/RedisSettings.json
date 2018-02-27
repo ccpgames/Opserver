@@ -22,7 +22,8 @@
           "CIS User Entitlement": "CIS:[\\w\\.]+:\\d*:Entitlements:\\d*",
           "CIS EVE Users": "CIS:[\\w\\.]+:Users:EVE:([\\w\\.]|:{2})+:EbsInfo",
           "MailService Email Cache": "MailService:ValidateEmail:.*",
-          "REST Framework Token Cache": "CCP:RestFramework:Tokens"
+          "REST Framework Token Cache": "CCP:RestFramework:Tokens",
+          "VGS Store Offers": "[\\w\\.]+_vgs_StoreOffersV2"
         }
       }
     ]
