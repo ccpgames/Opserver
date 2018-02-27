@@ -5,6 +5,9 @@
         "analysisRegexes": {
           "SSO Throttles": "SSO:[\\w\\.]+:LoginThrottle",
           "SSO Country List": "SSO:[\\w\\.]+:Countries",
+          "SSO Role List": "SSO:[\\w\\.]+:Roles",
+          "SSO Status List": "SSO:[\\w\\.]+:Statuses",
+          "SSO Token Authentication Attribute Cache": "SSO:[\\w\\.]+:OAuthAuthenticateAttributes:Token",
           "SSO Internal Service Tokens": "SSO:[\\w\\.]+:InternalServiceTokens",
           "SSO EVE Users by id(with character info)": "SSO:[\\w\\.]+:User:EVE",
           "SSO Clients Authorizations": "SSO:[\\w\\.]+:ClientAuthorization",
