@@ -1,5 +1,6 @@
 ## Opserver
 [![Build status](https://ci.appveyor.com/api/projects/status/7m0b1e4orimk5nvr/branch/master?svg=true)](https://ci.appveyor.com/project/StackExchange/opserver/branch/master)
+[![Open Source Helpers](https://www.codetriage.com/opserver/opserver/badges/users.svg)](https://www.codetriage.com/opserver/opserver)
 
 Opserver is a monitoring system by the team at [Stack Exchange](https://stackexchange.com), home of [Stack Overflow](https://stackoverflow.com).  It is a tool for monitoring:  
 * Servers/Switches & anything supported by Bosun, Orion, or direct WMI monitoring
@@ -80,7 +81,7 @@ There is a HeaderHTML tag that lets you put arbitrary html above all content. Yo
 [StackExchange.Redis](https://github.com/StackExchange/StackExchange.Redis) by Marc Gravell  
 [Dapper](https://github.com/StackExchange/Dapper/) by Stack Exchange  
 [JSON.Net](https://www.newtonsoft.com/json) by James Newton-King     
-[MiniProfiler](http://miniprofiler.com/) by Stack Exchange    
+[MiniProfiler](https://miniprofiler.com/) by Stack Exchange    
 [StackExchange.Exceptional](https://github.com/NickCraver/StackExchange.Exceptional) by Nick Craver  
 
 JavaScript:  
@@ -102,5 +103,5 @@ Opserver is licensed under the [MIT License](https://opensource.org/licenses/MIT
 We'd like to thank several people outside Stack Exchange for large contributions to Opserver's development.
 
 * [Brent Ozar](https://www.brentozar.com/) for lots of (continuing) help on the SQL monitoring, with some of the initial queries and help letting us know many use cases to cover.  We'll be integrating some of the awesome tooling Brent and his team have to further assist DBAs and developers (like [sp_Blitz](https://www.brentozar.com/blitz/), [sp_BlitzIndex](https://www.brentozar.com/blitzindex/), and some you'll hear about soon).  
-* [Adam Machanic](http://sqlblog.com/blogs/adam_machanic/) for [sp_WhoIsActive](http://sqlblog.com/blogs/adam_machanic/archive/tags/who+is+active/default.aspx), which powers the active tab for a SQL Instance.  He also assisted with use cases and performance tuning on the use of sp_WhoIsActive.  
+* [Adam Machanic](http://sqlblog.com/blogs/adam_machanic/) for [sp_WhoIsActive](http://whoisactive.com/), which powers the active tab for a SQL Instance.  He also assisted with use cases and performance tuning on the use of sp_WhoIsActive.  
 * The [Sentry One](https://www.sentryone.com/) guys: [Aaron Bertrand](http://sqlblog.com/blogs/aaron_bertrand/) and [Kevin Kline](http://kevinekline.com/) for even more SQL use cases, and their help with upcoming integration with SQL Sentry.

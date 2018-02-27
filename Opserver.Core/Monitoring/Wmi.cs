@@ -27,15 +27,13 @@ namespace StackExchange.Opserver.Monitoring
             {
                 using (var q = Query(machineName, query, wmiNamespace))
                 {
-                    await q.GetFirstResultAsync().ConfigureAwait(false);
+                    return (await q.GetFirstResultAsync().ConfigureAwait(false)) != null;
                 }
             }
             catch
             {
                 return false;
             }
-
-            return true;
         }
 
         private static readonly ConnectionOptions _localOptions, _remoteOptions;
@@ -171,6 +169,20 @@ namespace StackExchange.Opserver.Monitoring
                     return true;
                 }
                 catch (ManagementException)
+                {
+                    result = null;
+                    return false;
+                }
+            }
+
+            public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+            {
+                try
+                {
+                    result = _obj.InvokeMethod(binder.Name, args);
+                    return true;
+                }
+                catch
                 {
                     result = null;
                     return false;

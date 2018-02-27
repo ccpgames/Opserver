@@ -516,6 +516,34 @@ Status.Dashboard.Server = (function () {
                 5: { sorter: 'dataVal', sortInitialOrder: 'desc' }
             }
         });
+
+        $(document).on('click', '.js-service-action', function () {
+            var link = $(this);
+            var $link = link.text('').prependWaveLoader();
+            var node = link.closest('[data-node]').data('node');
+            $.ajax(Status.options.rootPath + 'dashboard/node/service/action', {
+                type: 'POST',
+                data: {
+                    node: node,
+                    name: link.closest('[data-name]').data('name'),
+                    serviceAction: link.data('action')
+                },
+                success: function (data, status, xhr) {
+                    if (data.Success === true) {
+                        if (node) {
+                            Status.refresh.run('Dashboard');
+                            window.location.reload(true);
+                        }
+                    } else {
+                        $link.text(link.data('action')).errorPopupFromJSON(xhr, data.Message);
+                    }
+                },
+                error: function (xhr) {
+                    $link.text(link.data('action')).errorPopupFromJSON(xhr, data.Message);
+                }
+            });
+            return false;
+        });
     }
     
     function liveDashboard(startValue) {
@@ -765,7 +793,7 @@ Status.SQL = (function () {
                 Status.popup('sql/active/filters' + window.location.search, null, filterOptions);
             },
             '#/db/': function (val, firstLoad, prev) {
-                var obj = val.indexOf('tables/') > 0 || val.indexOf('views/') || val.indexOf('storedprocedures/') > 0
+                var obj = val.indexOf('tables/') > 0 || val.indexOf('views/') || val.indexOf('storedprocedures/') || val.indexOf('unusedindexes/') > 0
                           ? val.split('/').pop() : null;
                 function showColumns() {
                     $('.js-next-collapsible').removeClass('info').next().hide();
@@ -776,7 +804,7 @@ Status.SQL = (function () {
                 }
                 if (!firstLoad) {
                     // TODO: Generalize this to not need the replace? Possibly a root load in the modal
-                    if ((/\/tables/.test(val) && /\/tables/.test(prev)) || (/\/views/.test(val) && /\/views/.test(prev)) || (/\/storedprocedures/.test(val) && /\/storedprocedures/.test(prev))) {
+                    if ((/\/tables/.test(val) && /\/tables/.test(prev)) || (/\/views/.test(val) && /\/views/.test(prev)) || (/\/storedprocedures/.test(val) && /\/storedprocedures/.test(prev)) || (/\/unusedindexes/.test(val) && /\/unusedindexes/.test(prev))) {
                         showColumns();
                         return;
                     }
@@ -934,7 +962,35 @@ Status.Redis = (function () {
                         : 'Error removing keys');
                 }
             });
-        });
+        }).on('click', '.js-redis-host-list', function (e) {
+            $(this).siblings().find('.fa-chevron-down').toggleClass('fa-chevron-down fa-chevron-right text-primary').end().next('.hidden').removeClass('selected').slideUp(150);
+            $(this).find('.fa-chevron-right').toggleClass('fa-chevron-down fa-chevron-right text-primary').end().next('.hidden').addClass('selected').slideDown(150);
+        }).on('click', '.js-server-actions-selection', function () {
+            var url = $(this).data('preview-url');
+            var operations = $('.js-redis-host-list + div.selected :input:enabled').serialize();
+            $('.js-server-action-preview').html('Loading Preview...');
+            $('.js-server-action-execute').prop('disabled', true).text('Loading Preview...');
+            $.post(url, operations, function (result) {
+                $('.js-server-action-preview').html(result);
+                $('.js-server-action-execute').prop('disabled', false).text('Execute');
+            });
+        }).on('click', '.js-server-action-execute', function (e) {
+            var url = $(this).data('perform-url');
+            var operations = $('.js-redis-server-actions-preview :input').serialize();
+            $.post(url, operations, function (response) {
+                if (response.success) {
+                    bootbox.hideAll();
+                    bootbox.alert(response.result);
+                }
+            });
+        }).on({
+            mouseenter: function () {
+                Status.refresh.pause();
+            },
+            mouseleave: function () {
+                Status.refresh.resume();
+            }
+        }, '.js-refresh .dropdown');
     }
 
     return {

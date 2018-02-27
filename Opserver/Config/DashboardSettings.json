@@ -1,0 +1,65 @@
+﻿{
+  "providers": {
+    "orion": {
+      "host": "solarwinds",
+      "connectionString": "Server=10.101.2.150;Database=SolarWindsOrion;Trusted_Connection=True;Timeout=10"
+    }
+  },
+  "showOther": false,
+  "excludePattern": "(SHA|NCL|WIN)-|RKV-(IT|RS|FIN)|DBCA",
+  "cpuWarningPercent": 50,
+  "cpuCriticalPercent": 75,
+  "memoryWarningPercent": 80,
+  "memoryCriticalPercent": 95,
+  "diskWarningPercent": 80,
+  "diskCriticalPercent": 95,
+  "showVolumePerformance": false,
+  "categories": [
+    {
+      "name": "Tranquility - Mammon",
+      "pattern": "^LHR-(TQ(VGS|SSO|MAIL)|CIS|MAM|OPSSERVER)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Tranquility - Web",
+      "pattern": "^LHR-(TQWEB|EVEGATE|EVEFORUMS|EVEAPI|WEBBACK)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Tranquility - EVE Cluster",
+      "pattern": "^LHR-(TQSOL|TQPROXY)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Singularity",
+      "pattern": "^RKV-SISI(?!DB)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Chaos",
+      "pattern": "^RKV-CHAOS(?!DB)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Database Servers",
+      "pattern": "^(LHR|RKV)-(.*DB(\\d+)?)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Redis Nodes",
+      "pattern": "^(LHR|RKV)-[A-Za-z]+REDIS(-SSO)?(\\d){2}",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "VM Hosts",
+      "pattern": "^(LHR|RKV)-(ESXI|ZODIAC)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Hadoop",
+      "pattern": "(MASTER\\d{2}|SLAVE\\d{3})\\.DOOBIEDOOP",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    }
+  ],
+  "perNodeSettings": []
+}
