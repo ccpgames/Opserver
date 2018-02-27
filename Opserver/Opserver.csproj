@@ -138,6 +138,7 @@
     <None Include="Config\RedisSettings.example.json" />
     <Content Include="Config\SecuritySettings.config.example" />
     <Content Include="Config\RedisSettings.json" />
+    <Content Include="Config\SecuritySettings.config" />
     <None Include="Config\SQLSettings.example.json" />
     <Content Include="Content\img\logo\logo.eps" />
     <None Include="Config\JiraSettings.example.json" />
