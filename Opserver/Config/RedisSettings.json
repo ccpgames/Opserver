@@ -4,6 +4,8 @@
       {
         "analysisRegexes": {
           "SSO Throttles": "SSO:[A-Za-z\\.]*:LoginThrottle",
+          "SSO Clients by Id": "SSO:[A-Za-z\\.]*:Client:Id",
+          "SSO Clients by Name": "SSO:[A-Za-z\\.]*:Client:Name",
           "SSO Access Tokens": "SSO:[[A-Za-z\\.]*:AccessToken",
           "SSO Verification Codes": "SSO:[[A-Za-z\\.]*:TwoFactorVerificationCode",
           "CIS User Information": "CIS:Users:[A-Z]*:\\d*:EbsInfo",
