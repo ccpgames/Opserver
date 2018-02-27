@@ -1,0 +1,14 @@
+﻿{
+  "defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;",
+  "clusters": [],
+  "instances": [
+    {
+      "name": "RKV-WEBDB",
+      "connectionString": "Data Source=rkv-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
+    },
+    {
+      "name": "LHR-WEBDB",
+      "connectionString": "Data Source=lhr-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
+    }
+  ]
+}
