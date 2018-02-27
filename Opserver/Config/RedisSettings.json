@@ -18,7 +18,7 @@
           "CIS Email Verification (Old)": "CIS:EmailVerification:[A-Fa-f0-9]*",
           "CIS User Entitlements Collection": "CIS:Users:[A-Z]*:\\d*:Entitlements",
           "CIS User Entitlement": "CIS:[A-Z]*:\\d*:Entitlements:\\d*",
-          "CIS EVE USers": "CIS:[A-Z]*:\\d*:Users:EVE:\\d*",
+          "CIS EVE Users": "CIS:[A-Z]*:\\d*:Users:EVE",
           "MailService Email Cache": "MailService:ValidateEmail:.*"
         }
       }
