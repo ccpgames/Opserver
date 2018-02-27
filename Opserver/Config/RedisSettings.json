@@ -18,7 +18,7 @@
           "CIS Email Verification (Old)": "CIS:EmailVerification:[A-Fa-f0-9]*",
           "CIS User Entitlements Collection": "CIS:[A-Za-z\\.]*:Users:[A-Z]*:\\d*:Entitlements",
           "CIS User Entitlement": "CIS:[A-Za-z\\.]*:\\d*:Entitlements:\\d*",
-          "CIS EVE Users": "CIS:[A-Za-z\\.]*:Users:EVE:\\d*:EbsInfo",
+          "CIS EVE Users": "CIS:\\w+:Users:EVE:\\w+:EbsInfo",
           "MailService Email Cache": "MailService:ValidateEmail:.*",
           "REST Framework Token Cache": "CCP:RestFramework:Tokens"
         }
