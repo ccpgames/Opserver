@@ -5,6 +5,7 @@
         "analysisRegexes": {
           "SSO Throttles": "SSO:[A-Za-z\\.]*:LoginThrottle",
           "SSO Country List": "SSO:[A-Za-z\\.]*:Countries",
+          "EVE Users": "SSO:[A-Za-z\\.]*:Users:EVE",
           "SSO Clients Authorizations": "SSO:[A-Za-z\\.]*:ClientAuthorization",
           "SSO Clients by Id": "SSO:[A-Za-z\\.]*:Client:Id",
           "SSO Clients by Name": "SSO:[A-Za-z\\.]*:Client:Name",
