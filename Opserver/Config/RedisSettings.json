@@ -1,0 +1,130 @@
+﻿{
+  "allServers": {
+    "instances": [
+      {
+        "analysisRegexes": {
+          "SSO Throttles": "SSO:[A-Za-z\\.]*:LoginThrottle",
+          "SSO Access Tokens": "SSO:[[A-Za-z\\.]*:AccessToken",
+          "SSO Verification Codes": "SSO:[[A-Za-z\\.]*:TwoFactorVerificationCode",
+          "CIS User Information": "CIS:Users:[A-Z]*:\\d*:EbsInfo",
+          "CIS Customer Email Change Requests": "CIS:Customers:\\d*:ChangeEmailAddress",
+          "CIS Email Verification": "CIS:EmailVerification:[A-Z]*:\\d*",
+          "CIS Email Verification (Old)": "CIS:EmailVerification:[A-Fa-f0-9]*",
+          "CIS User Entitlements Collection": "CIS:Users:[A-Z]*:\\d*:Entitlements",
+          "CIS User Entitlement": "CIS:Users:[A-Z]*:\\d*:Entitlements:\\d*",
+          "MailService Email Cache": "MailService:ValidateEmail:.*"
+        }
+      }
+    ]
+  },
+  "Servers": [
+    {
+      "name": "LHR-TQREDIS01.ccpgames.net",
+      "instances": [
+        {
+          "name": "TQ-API",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "LHR-TQREDIS02.ccpgames.net",
+      "instances": [
+        {
+          "name": "TQ-API",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "LHR-TQREDIS-SSO01.ccpgames.net",
+      "instances": [
+        {
+          "name": "TQ-SSO",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "LHR-TQREDIS-SSO02.ccpgames.net",
+      "instances": [
+        {
+          "name": "TQ-SSO",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "LHR-ESIREDIS01.ccpgames.net",
+      "instances": [
+        {
+          "name": "TQ-ESI",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "LHR-ESIREDIS02.ccpgames.net",
+      "instances": [
+        {
+          "name": "TQ-ESI",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "RKV-TESTREDIS01.dtccpgames.net",
+      "instances": [
+        {
+          "name": "Verne TEST",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "RKV-TESTREDIS02.dtccpgames.net",
+      "instances": [
+        {
+          "name": "Verne TEST",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "RKV-TESTREDIS03.dtccpgames.net",
+      "instances": [
+        {
+          "name": "Verne TEST",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "RKV-DEVREDIS01.ccp.ad.local",
+      "instances": [
+        {
+          "name": "Verne DEV",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "RKV-DEVREDIS02.ccp.ad.local",
+      "instances": [
+        {
+          "name": "Verne DEV",
+          "port": "6379"
+        }
+      ]
+    },
+    {
+      "name": "RKV-DEVREDIS03.ccp.ad.local",
+      "instances": [
+        {
+          "name": "Verne DEV",
+          "port": "6379"
+        }
+      ]
+    }
+  ]
+}
