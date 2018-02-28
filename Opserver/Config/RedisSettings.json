@@ -33,111 +33,51 @@
   "Servers": [
     {
       "name": "LHR-TQREDIS01.ccpgames.net",
-      "instances": [
-        {
-          "name": "TQ-API",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "TQ XML API"
     },
     {
       "name": "LHR-TQREDIS02.ccpgames.net",
-      "instances": [
-        {
-          "name": "TQ-API",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "TQ XML API"
     },
     {
       "name": "LHR-TQREDIS-SSO01.ccpgames.net",
-      "instances": [
-        {
-          "name": "TQ-SSO",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "TQ SSO"
     },
     {
       "name": "LHR-TQREDIS-SSO02.ccpgames.net",
-      "instances": [
-        {
-          "name": "TQ-SSO",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "TQ SSO"
     },
     {
       "name": "LHR-ESIREDIS01.ccpgames.net",
-      "instances": [
-        {
-          "name": "TQ-ESI",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "TQ ESI"
     },
     {
       "name": "LHR-ESIREDIS02.ccpgames.net",
-      "instances": [
-        {
-          "name": "TQ-ESI",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "TQ ESI"
     },
     {
       "name": "RKV-TESTREDIS01.dtccpgames.net",
-      "instances": [
-        {
-          "name": "Verne TEST",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "Test Environment"
     },
     {
       "name": "RKV-TESTREDIS02.dtccpgames.net",
-      "instances": [
-        {
-          "name": "Verne TEST",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "Test Environment"
     },
     {
       "name": "RKV-TESTREDIS03.dtccpgames.net",
-      "instances": [
-        {
-          "name": "Verne TEST",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "Test Environment"
     },
     {
       "name": "RKV-DEVREDIS01.ccp.ad.local",
-      "instances": [
-        {
-          "name": "Verne DEV",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "Development Environment"
     },
     {
       "name": "RKV-DEVREDIS02.ccp.ad.local",
-      "instances": [
-        {
-          "name": "Verne DEV",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "Development Environment"
     },
     {
       "name": "RKV-DEVREDIS03.ccp.ad.local",
-      "instances": [
-        {
-          "name": "Verne DEV",
-          "port": "6379"
-        }
-      ]
+      "replicationGroup": "Development Environment"
     }
   ]
 }
