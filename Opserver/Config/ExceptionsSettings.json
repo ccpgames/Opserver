@@ -42,6 +42,16 @@
       // (Optional) How often to poll this store for new/changed exceptions - defaults to 300
       "pollIntervalSeconds": 30,
       // SQL Server connection string to the Exceptional store
+      "connectionString": "Data Source=rkv-devdb.ccp.ad.local;Initial Catalog=web_ExceptionLog;Integrated Security=SSPI;"
+    },
+    {
+      // Name of the exception store (mainly for debugging)
+      "name": "Test",
+      // (Optional) The query timeout before giving up on this store (when shit hits the fan...maybe a store isn't available) - defualt is 30 timeout
+      "queryTimeoutMs": 2000,
+      // (Optional) How often to poll this store for new/changed exceptions - defaults to 300
+      "pollIntervalSeconds": 30,
+      // SQL Server connection string to the Exceptional store
       "connectionString": "Data Source=rkv-webdb.dbccpgames.net;Initial Catalog=web_ExceptionLog;Integrated Security=SSPI;"
     },
     {
