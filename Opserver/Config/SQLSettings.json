@@ -3,10 +3,6 @@
   "clusters": [],
   "instances": [
     {
-      "name": "RKV-DEVDB",
-      "connectionString": "Data Source=rkv-devdb.ccp.ad.local;Initial Catalog=master;Integrated Security=SSPI;"
-    },
-    {
       "name": "RKV-WEBDB",
       "connectionString": "Data Source=rkv-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
     },
