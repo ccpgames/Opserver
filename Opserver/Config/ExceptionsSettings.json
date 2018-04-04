@@ -42,7 +42,7 @@
       // (Optional) How often to poll this store for new/changed exceptions - defaults to 300
       "pollIntervalSeconds": 30,
       // SQL Server connection string to the Exceptional store
-      "connectionString": "Server=tcp:ccp-sql-mammon-dev.database.windows.net,1433;Initial Catalog=exceptional;Persist Security Info=False;User ID=exceptional;Password=Bootstrap3.14!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+      "connectionString": "Data Source=lhr-webdb.dbccpgames.net;Initial Catalog=web_exceptional;Integrated Security=SSPI;"
     }
   ],
   /* Replacements for Stack Trace descriptions. It's general purpose with specific uses in mind.
