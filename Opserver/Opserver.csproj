@@ -95,6 +95,7 @@
     <Compile Include="Views\SQL\Servers.Model.cs">
       <DependentUpon>Servers.cshtml</DependentUpon>
     </Compile>
+    <Content Include="Config\ExceptionsSettings.json" />
     <None Include="Config\Readme.txt" />
     <Content Include="Content\bootstrap\js\bootstrap.min.js" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
