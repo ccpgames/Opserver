@@ -32,19 +32,15 @@
   },
   "Servers": [
     {
-      "name": "LHR-TQREDIS01.ccpgames.net",
-      "replicationGroup": "TQ XML API"
-    },
-    {
-      "name": "LHR-TQREDIS02.ccpgames.net",
-      "replicationGroup": "TQ XML API"
-    },
-    {
       "name": "LHR-TQREDIS-SSO01.ccpgames.net",
       "replicationGroup": "TQ SSO"
     },
     {
       "name": "LHR-TQREDIS-SSO02.ccpgames.net",
+      "replicationGroup": "TQ SSO"
+    },
+    {
+      "name": "LHR-TQREDIS-SSO03.ccpgames.net",
       "replicationGroup": "TQ SSO"
     },
     {
@@ -78,6 +74,14 @@
     {
       "name": "RKV-DEVREDIS03.ccp.ad.local",
       "replicationGroup": "Development Environment"
+    },
+    {
+      "name": "10.51.2.11",
+      "replicationGroup": "Kiring Environment"
+    },
+    {
+      "name": "10.51.2.12",
+      "replicationGroup": "Kiring Environment"
     }
   ]
 }
