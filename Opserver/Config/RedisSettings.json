@@ -17,6 +17,7 @@
           "SSO Clients by Name": "SSO:[\\w\\.]+:Client:Name",
           "SSO Access Tokens": "SSO:[\\w\\.]+:AccessToken",
           "SSO Verification Codes": "SSO:[\\w\\.]+:TwoFactorVerificationCode",
+          "HaveIBeenPwned Ranges": "SSO:[\\w\\.]+:HaveIBeenPwned",
           "CIS Customer Email Change Requests": "CIS:[\\w\\.]+:Customers:\\d*:ChangeEmailAddress",
           "CIS Email Verification": "CIS:[\\w\\.]+:EmailVerification:\\w+:\\d*",
           "CIS Email Verification (Old)": "CIS:[\\w\\.]+:EmailVerification:[A-Fa-f0-9]*",
@@ -37,10 +38,6 @@
     },
     {
       "name": "LHR-TQREDIS-SSO02.ccpgames.net",
-      "replicationGroup": "TQ SSO"
-    },
-    {
-      "name": "LHR-TQREDIS-SSO03.ccpgames.net",
       "replicationGroup": "TQ SSO"
     },
     {
@@ -74,14 +71,6 @@
     {
       "name": "RKV-DEVREDIS03.ccp.ad.local",
       "replicationGroup": "Development Environment"
-    },
-    {
-      "name": "10.51.2.11",
-      "replicationGroup": "Kiring Environment"
-    },
-    {
-      "name": "10.51.2.12",
-      "replicationGroup": "Kiring Environment"
     }
   ]
 }
