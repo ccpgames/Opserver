@@ -1,9 +1,9 @@
-﻿using Dapper;
-using EnumsNET;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Dapper;
+using EnumsNET;
 
 namespace StackExchange.Opserver.Data.SQL
 {
@@ -59,6 +59,9 @@ namespace StackExchange.Opserver.Data.SQL
 
         public LightweightCache<List<DatabaseTable>> GetTableInfo(string databaseName) =>
             DatabaseFetch<DatabaseTable>(databaseName);
+
+        public LightweightCache<List<InMemoryDatabaseTable>> GetInMemoryTableInfo(string databaseName) =>
+            DatabaseFetch<InMemoryDatabaseTable>(databaseName);
 
         public LightweightCache<List<DatabaseView>> GetViewInfo(string databaseName) =>
             DatabaseFetch<DatabaseView>(databaseName, 60.Seconds());
@@ -485,7 +488,7 @@ Select p.object_id,
         public class RestoreHistory : ISQLVersioned
         {
             public DateTime RestoreFinishDate { get; internal set; }
-            public string  UserName { get; internal set; }
+            public string UserName { get; internal set; }
             public string BackupMedia { get; internal set; }
             public DateTime BackupStartDate { get; internal set; }
             public DateTime BackupFinishDate { get; internal set; }
@@ -515,7 +518,7 @@ Select p.object_id,
                 }
             }
 
-            public Version MinVersion =>  SQLServerVersions.SQL2008.SP1;
+            public Version MinVersion => SQLServerVersions.SQL2008.SP1;
             public string GetFetchSQL(Version v)
             {
                 return @"
@@ -643,7 +646,7 @@ Select Top 100
                     if (FileIsPercentGrowth) return FileGrowthRaw.ToString() + "%";
 
                     // Growth that's not percent-based is 8KB pages rounded to the nearest 64KB
-                    return (FileGrowthRaw*8*1024).ToHumanReadableSize();
+                    return (FileGrowthRaw * 8 * 1024).ToHumanReadableSize();
                 }
             }
 
@@ -660,7 +663,7 @@ Select Top 100
                         case 268435456:
                             return "2 TB";
                         default:
-                            return (FileMaxSizePages*8*1024).ToHumanReadableSize();
+                            return (FileMaxSizePages * 8 * 1024).ToHumanReadableSize();
                     }
                 }
             }
@@ -785,6 +788,39 @@ Drop Table #vlfTemp;";
                     return FetchSQL.Replace("RecoveryUnitId int,", "");
                 return FetchSQL;
             }
+        }
+
+        public class InMemoryDatabaseTable : ISQLVersioned
+        {
+            public Version MinVersion => SQLServerVersions.SQL2016.SP1;
+
+            public int Id { get; internal set; }
+            public string SchemaName { get; internal set; }
+            public string TableName { get; internal set; }
+            public DateTime CreationDate { get; internal set; }
+            public DateTime LastModifiedDate { get; internal set; }
+            public int MemoryTableSizeKB { get; internal set; }
+            public int MemoryIndexSizeKB { get; internal set; }
+            public int MemoryTotalSizeKB => MemoryTableSizeKB + MemoryIndexSizeKB;
+            public int InsertAttempts { get; internal set; }
+            public int DeleteAttempts { get; internal set; }
+            public int UpdateAttempts { get; internal set; }
+
+            public string GetFetchSQL(Version v) => @"
+SELECT tables.object_id Id,
+       OBJECT_SCHEMA_NAME(tables.object_id) SchemaName,
+       OBJECT_NAME(tables.object_id) TableName,
+       tables.create_date CreationDate,
+       tables.modify_date LastModifiedDate,
+	   tableMemStats.memory_used_by_table_kb MemoryTableSizeKB,
+	   tableMemStats.memory_used_by_indexes_kb MemoryIndexSizeKB,
+	   objectStats.row_insert_attempts InsertAttempts,
+	   objectStats.row_delete_attempts DeleteAttempts,
+	   objectStats.row_update_attempts UpdateAttempts
+  FROM sys.tables tables
+    INNER JOIN sys.dm_db_xtp_object_stats objectStats ON objectStats.object_id = tables.object_id
+    INNER JOIN sys.dm_db_xtp_table_memory_stats tableMemStats ON tableMemStats.object_id = tables.object_id
+ WHERE tables.is_memory_optimized = 1";
         }
 
         public class DatabaseTable : ISQLVersioned
@@ -936,51 +972,51 @@ Select v.object_id Id,
                 }
             }
 
-// For non-SQL later
-//            internal const string FetchSQL = @"
-//Select c.TABLE_SCHEMA SchemaName,
-//       c.TABLE_NAME TableName,
-//       c.ORDINAL_POSITION Position,
-//       c.COLUMN_NAME ColumnName,
-//       c.COLUMN_DEFAULT ColumnDefault,
-//       Cast(Case c.IS_NULLABLE When 'YES' Then 1 Else 0 End as BIT) IsNullable,
-//       c.DATA_TYPE DataType,
-//       c.CHARACTER_MAXIMUM_LENGTH MaxLength,
-//       c.NUMERIC_PRECISION Precision,
-//       c.NUMERIC_PRECISION_RADIX NumericPrecisionRadix,
-//       c.NUMERIC_SCALE NumericScale,
-//       c.DATETIME_PRECISION DatetimePrecision,
-//       c.COLLATION_NAME CollationName,
-//       kcu.PrimaryKeyConstraint,
-//       kcu.ForeignKeyConstraint,
-//       kcu.ForeignKeyTargetSchema,
-//       kcu.ForeignKeyTargetTable,
-//       kcu.ForeignKeyTargetColumn
-//  From INFORMATION_SCHEMA.COLUMNS c
-//       Left Join (Select cu.TABLE_SCHEMA, 
-//                         cu.TABLE_NAME, 
-//                         cu.COLUMN_NAME,
-//                         (Case When OBJECTPROPERTY(OBJECT_ID(cu.CONSTRAINT_NAME), 'IsPrimaryKey') = 1
-//                               Then cu.CONSTRAINT_NAME
-//                               Else Null
-//                          End) as PrimaryKeyConstraint,
-//                          rc.CONSTRAINT_NAME ForeignKeyConstraint,
-//                          cut.TABLE_SCHEMA ForeignKeyTargetSchema,
-//                          cut.TABLE_NAME ForeignKeyTargetTable,
-//                          cut.COLUMN_NAME ForeignKeyTargetColumn
-//                    From INFORMATION_SCHEMA.KEY_COLUMN_USAGE cu
-//                         Left Join INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
-//                           On cu.CONSTRAINT_CATALOG = rc.CONSTRAINT_CATALOG
-//                          And cu.CONSTRAINT_SCHEMA = rc.CONSTRAINT_SCHEMA
-//                          And cu.CONSTRAINT_NAME = rc.CONSTRAINT_NAME
-//                         Left Join INFORMATION_SCHEMA.KEY_COLUMN_USAGE cut
-//                          On rc.UNIQUE_CONSTRAINT_CATALOG = cut.CONSTRAINT_CATALOG
-//                          And rc.UNIQUE_CONSTRAINT_SCHEMA = cut.CONSTRAINT_SCHEMA
-//                          And rc.UNIQUE_CONSTRAINT_NAME = cut.CONSTRAINT_NAME) kcu
-//         On c.TABLE_SCHEMA = kcu.TABLE_SCHEMA
-//         And c.TABLE_NAME = kcu.TABLE_NAME
-//         And c.COLUMN_NAME = kcu.COLUMN_NAME
-//Order By c.TABLE_SCHEMA, c.TABLE_NAME, c.ORDINAL_POSITION";
+            // For non-SQL later
+            //            internal const string FetchSQL = @"
+            //Select c.TABLE_SCHEMA SchemaName,
+            //       c.TABLE_NAME TableName,
+            //       c.ORDINAL_POSITION Position,
+            //       c.COLUMN_NAME ColumnName,
+            //       c.COLUMN_DEFAULT ColumnDefault,
+            //       Cast(Case c.IS_NULLABLE When 'YES' Then 1 Else 0 End as BIT) IsNullable,
+            //       c.DATA_TYPE DataType,
+            //       c.CHARACTER_MAXIMUM_LENGTH MaxLength,
+            //       c.NUMERIC_PRECISION Precision,
+            //       c.NUMERIC_PRECISION_RADIX NumericPrecisionRadix,
+            //       c.NUMERIC_SCALE NumericScale,
+            //       c.DATETIME_PRECISION DatetimePrecision,
+            //       c.COLLATION_NAME CollationName,
+            //       kcu.PrimaryKeyConstraint,
+            //       kcu.ForeignKeyConstraint,
+            //       kcu.ForeignKeyTargetSchema,
+            //       kcu.ForeignKeyTargetTable,
+            //       kcu.ForeignKeyTargetColumn
+            //  From INFORMATION_SCHEMA.COLUMNS c
+            //       Left Join (Select cu.TABLE_SCHEMA, 
+            //                         cu.TABLE_NAME, 
+            //                         cu.COLUMN_NAME,
+            //                         (Case When OBJECTPROPERTY(OBJECT_ID(cu.CONSTRAINT_NAME), 'IsPrimaryKey') = 1
+            //                               Then cu.CONSTRAINT_NAME
+            //                               Else Null
+            //                          End) as PrimaryKeyConstraint,
+            //                          rc.CONSTRAINT_NAME ForeignKeyConstraint,
+            //                          cut.TABLE_SCHEMA ForeignKeyTargetSchema,
+            //                          cut.TABLE_NAME ForeignKeyTargetTable,
+            //                          cut.COLUMN_NAME ForeignKeyTargetColumn
+            //                    From INFORMATION_SCHEMA.KEY_COLUMN_USAGE cu
+            //                         Left Join INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS rc
+            //                           On cu.CONSTRAINT_CATALOG = rc.CONSTRAINT_CATALOG
+            //                          And cu.CONSTRAINT_SCHEMA = rc.CONSTRAINT_SCHEMA
+            //                          And cu.CONSTRAINT_NAME = rc.CONSTRAINT_NAME
+            //                         Left Join INFORMATION_SCHEMA.KEY_COLUMN_USAGE cut
+            //                          On rc.UNIQUE_CONSTRAINT_CATALOG = cut.CONSTRAINT_CATALOG
+            //                          And rc.UNIQUE_CONSTRAINT_SCHEMA = cut.CONSTRAINT_SCHEMA
+            //                          And rc.UNIQUE_CONSTRAINT_NAME = cut.CONSTRAINT_NAME) kcu
+            //         On c.TABLE_SCHEMA = kcu.TABLE_SCHEMA
+            //         And c.TABLE_NAME = kcu.TABLE_NAME
+            //         And c.COLUMN_NAME = kcu.COLUMN_NAME
+            //Order By c.TABLE_SCHEMA, c.TABLE_NAME, c.ORDINAL_POSITION";
             internal const string FetchSQL2008Columns = @"
        c.is_sparse IsSparse,
        c.is_column_set IsColumnSet,
