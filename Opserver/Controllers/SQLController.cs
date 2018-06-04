@@ -32,11 +32,11 @@ namespace StackExchange.Opserver.Controllers
         public ActionResult Servers(string cluster, string node, string ag, bool detailOnly = false)
         {
             var vd = new ServersModel
-                {
-                    StandaloneInstances = SQLModule.StandaloneInstances,
-                    Clusters = SQLModule.Clusters,
-                    Refresh = node.HasValue() ? 10 : 5
-                };
+            {
+                StandaloneInstances = SQLModule.StandaloneInstances,
+                Clusters = SQLModule.Clusters,
+                Refresh = node.HasValue() ? 10 : 5
+            };
 
             if (cluster.HasValue())
                 vd.CurrentCluster = vd.Clusters.Find(c => string.Equals(c.Name, cluster, StringComparison.OrdinalIgnoreCase));
@@ -216,7 +216,7 @@ namespace StackExchange.Opserver.Controllers
             {
                 View = SQLViews.Databases,
                 CurrentInstance = i,
-                Refresh = 2*60
+                Refresh = 2 * 60
             };
             return View(vd);
         }
@@ -247,6 +247,9 @@ namespace StackExchange.Opserver.Controllers
                 case "tables":
                     vd.View = DatabasesModel.Views.Tables;
                     return View("Databases.Modal.Tables", vd);
+                case "inmemorytables":
+                    vd.View = DatabasesModel.Views.InMemoryTables;
+                    return View("Databases.Modal.InMemoryTables", vd);
                 case "views":
                     vd.View = DatabasesModel.Views.Views;
                     return View("Databases.Modal.Views", vd);
