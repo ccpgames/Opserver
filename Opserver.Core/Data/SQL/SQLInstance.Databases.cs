@@ -805,22 +805,26 @@ Drop Table #vlfTemp;";
             public int InsertAttempts { get; internal set; }
             public int DeleteAttempts { get; internal set; }
             public int UpdateAttempts { get; internal set; }
+            public int RowCount { get; internal set; }
 
             public string GetFetchSQL(Version v) => @"
-SELECT tables.object_id Id,
-       OBJECT_SCHEMA_NAME(tables.object_id) SchemaName,
-       OBJECT_NAME(tables.object_id) TableName,
-       tables.create_date CreationDate,
-       tables.modify_date LastModifiedDate,
-	   tableMemStats.memory_used_by_table_kb MemoryTableSizeKB,
-	   tableMemStats.memory_used_by_indexes_kb MemoryIndexSizeKB,
-	   objectStats.row_insert_attempts InsertAttempts,
-	   objectStats.row_delete_attempts DeleteAttempts,
-	   objectStats.row_update_attempts UpdateAttempts
-  FROM sys.tables tables
-    INNER JOIN sys.dm_db_xtp_object_stats objectStats ON objectStats.object_id = tables.object_id
-    INNER JOIN sys.dm_db_xtp_table_memory_stats tableMemStats ON tableMemStats.object_id = tables.object_id
- WHERE tables.is_memory_optimized = 1";
+SELECT t.object_id Id,
+       OBJECT_SCHEMA_NAME(t.object_id) SchemaName,
+       OBJECT_NAME(t.object_id) TableName,
+       t.create_date CreationDate,
+       t.modify_date LastModifiedDate,
+	   mem.memory_used_by_table_kb MemoryTableSizeKB,
+	   mem.memory_used_by_indexes_kb MemoryIndexSizeKB,
+	   obj.row_insert_attempts InsertAttempts,
+	   obj.row_delete_attempts DeleteAttempts,
+	   obj.row_update_attempts UpdateAttempts,
+	   part.rows [RowCount]
+  FROM sys.tables t
+    INNER JOIN sys.dm_db_xtp_object_stats obj ON obj.object_id = t.object_id
+    INNER JOIN sys.dm_db_xtp_table_memory_stats mem ON mem.object_id = t.object_id
+	INNER JOIN sys.partitions part ON part.object_id = t.object_id
+	  INNER JOIN sys.indexes i ON i.index_id = part.index_id AND i.object_id = part.object_id
+ WHERE t.is_memory_optimized = 1 AND i.type = 0";
         }
 
         public class DatabaseTable : ISQLVersioned
