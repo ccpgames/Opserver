@@ -27,6 +27,7 @@
         <thead>
             <tr>
                 <th>Table</th>
+                <th>Rows</th>
                 <th>Data Size</th>
                 <th>Index Size</th>
                 <th>Total Size</th>
@@ -44,6 +45,7 @@
                         <span class="text-muted">@(t.SchemaName).</span><span>@t.TableName</span>
                     </a>
                 </td>
+                <td data-val="@t.RowCount.ToString()">@t.RowCount.ToComma()</td>
                 <td data-val="@t.MemoryTableSizeKB.ToString()">@((t.MemoryTableSizeKB * 1024).ToSize().ToMutedIfNA())</td>
                 <td data-val="@t.MemoryIndexSizeKB.ToString()">@((t.MemoryIndexSizeKB * 1024).ToSize().ToMutedIfNA())</td>
                 <td data-val="@t.MemoryTotalSizeKB.ToString()">@((t.MemoryTotalSizeKB * 1024).ToSize().ToMutedIfNA())</td>
@@ -52,7 +54,7 @@
                 <td data-val="@t.DeleteAttempts.ToString()">@t.DeleteAttempts.ToComma()</td>
             </tr>
                 <tr class="tablesorter-childRow hidden text-wrap">
-                    <td colspan="7">
+                    <td colspan="8">
                         @Html.Partial("Databases.Modal.Columns", columnLookup[Tuple.Create(t.SchemaName, t.TableName)])
                         @Html.Partial("Databases.Modal.Tables.Indexes", indexes.Data.Where(c => c.SchemaName == t.SchemaName && c.TableName == t.TableName))
                         @Html.Partial("Databases.Modal.Partitions", partitions.Data.Where(c => c.SchemaName == t.SchemaName && c.TableName == t.TableName))
@@ -66,19 +68,20 @@
             {
             <tr class="total-row">
                 <td><b>Total</b> <span class="text-muted">(@tables.Data.Count.Pluralize("table"))</span></td>
+                <td>@(tables.Data.Sum(t => t.RowCount).ToComma())</td>
                 <td>@((tables.Data.Sum(t => t.MemoryTableSizeKB) * 1024).ToSize().ToMutedIfNA())</td>
                 <td>@((tables.Data.Sum(t => t.MemoryIndexSizeKB) * 1024).ToSize().ToMutedIfNA())</td>
                 <td>@((tables.Data.Sum(t => t.MemoryTotalSizeKB) * 1024).ToSize().ToMutedIfNA())</td>
                 <td>@(tables.Data.Sum(t => t.InsertAttempts).ToComma())</td>
-                <td>@(tables.Data.Sum(t => t.DeleteAttempts).ToComma())</td>
                 <td>@(tables.Data.Sum(t => t.UpdateAttempts).ToComma())</td>
+                <td>@(tables.Data.Sum(t => t.DeleteAttempts).ToComma())</td>
 
             </tr>
             }
             else
             {
                 <tr>
-                    <td colspan="7">
+                    <td colspan="8">
                         <div class="no-content">There aren't any tables in this database.</div>
                     </td>
                 </tr>
