@@ -1,22 +1,30 @@
 ﻿{
   "defaultConnectionString": "Data Source=$ServerName$;Initial Catalog=master;Integrated Security=SSPI;",
-  "clusters": [],
-  "instances": [
-    {
-      "name": "RKV-WEBDB",
-      "connectionString": "Data Source=rkv-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
-    },
+  "clusters": [
     {
       "name": "LHR-WEBDB",
-      "connectionString": "Data Source=lhr-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
-    },
-    {
-      "name": "LHR-TQDB",
-      "connectionString": "Data Source=lhr-tqdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
-    },
-    {
-      "name": "SolarWinds",
-      "connectionString": "Data Source=10.101.2.150;Initial Catalog=master;Integrated Security=SSPI;"
+      "refreshIntervalSeconds": 20,
+      "nodes": [
+        { "name": "lhr-webdb01.dbccpgames.net" },
+        { "name": "lhr-webdb02.dbccpgames.net" }
+      ]
+    }],
+      "instances": [
+        {
+          "name": "RKV-WEBDB",
+          "connectionString": "Data Source=rkv-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
+        },
+        {
+          "name": "LHR-WEBDB",
+          "connectionString": "Data Source=lhr-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
+        },
+        {
+          "name": "LHR-TQDB",
+          "connectionString": "Data Source=lhr-tqdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
+        },
+        {
+          "name": "SolarWinds",
+          "connectionString": "Data Source=10.101.2.150;Initial Catalog=master;Integrated Security=SSPI;"
+        }
+      ]
     }
-  ]
-}
