@@ -5,8 +5,8 @@
       "name": "LHR-WEBDB",
       "refreshIntervalSeconds": 20,
       "nodes": [
-        { "name": "lhr-webdb01.dbccpgames.net" },
-        { "name": "lhr-webdb02.dbccpgames.net" }
+        { "name": "lhr-webdb.dbccpgames.net" },
+        { "name": "rkv-webdbao.dbccpgames.net" }
       ]
     }],
       "instances": [
