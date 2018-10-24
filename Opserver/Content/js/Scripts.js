@@ -245,6 +245,12 @@
         });
     }
 
+    function highlight() {
+        $('pre code').each(function (i, block) {
+            hljs.highlightBlock(block);
+        });
+    }
+
     function init(options) {
         Status.options = options;
 
@@ -392,7 +398,6 @@
             }
         });
         prepTableSorter();
-        prettyPrint();
         hljs.initHighlighting();
     }
 
@@ -403,6 +408,7 @@
             list: loadersList,
             register: registerLoaders
         },
+        highlight: highlight,
         graphCount: 0,
         refresh: {
             register: registerRefresh,
@@ -714,20 +720,21 @@ Status.SQL = (function () {
         }, {
             onLoad: function() {
                 $(this).closest('.modal-lg').removeClass('modal-lg').addClass('modal-huge');
-                prettyPrint();
-                $('.qp-root').drawQueryPlanLines();
-                var currentTt;
-                $(this).find('.qp-node').hover(function() {
-                    var pos = $(this).offset();
-                    var tt = $(this).find('.qp-tt');
-                    currentTt = tt.clone();
-                    currentTt.addClass('sql-query-tooltip')
-                        .appendTo(document.body)
-                        .css({ top: pos.top + $(this).outerHeight(), left: pos.left })
-                        .show();
-                }, function() {
-                    if (currentTt) currentTt.hide();
-                });
+                Status.highlight();
+                if ($('.qp-root').length) {
+                    //var currentTt;
+                    //$(this).find('.qp-node').hover(function () {
+                    //    var pos = $(this).offset();
+                    //    var tt = $(this).find('.qp-tt');
+                    //    currentTt = tt.clone();
+                    //    currentTt.addClass('sql-query-tooltip')
+                    //        .appendTo(document.body)
+                    //        .css({ top: pos.top + $(this).outerHeight(), left: pos.left })
+                    //        .show();
+                    //}, function () {
+                    //    if (currentTt) currentTt.hide();
+                    //});
+                }
                 $(this).find('.js-remove-plan').on('click', function() {
                     if ($(this).hasClass('js-confirm')) {
                         $(this).text('confirm?').removeClass('js-confirm');
@@ -1076,7 +1083,9 @@ Status.Exceptions = (function () {
                 $.ajax(Status.options.rootPath + 'exceptions/load-more', {
                     data: $.extend({}, baseOptions, {
                         count: options.loadMore,
-                        prevLast: lastGuid
+                        prevLast: lastGuid,
+                        q: options.search,
+                        showDeleted: options.showDeleted
                     }),
                     cache: false
                 }).done(function (html) {
@@ -1166,7 +1175,6 @@ Status.Exceptions = (function () {
             deleteError(this);
             return false;
         });
-
         // ajax the protection on the list page
         $('.js-content').on('click', '.js-exceptions a.js-protect-link', function () {
             var url = $(this).attr('href'),
@@ -1184,8 +1192,8 @@ Status.Exceptions = (function () {
                 url: url,
                 success: function (data) {
                     $(this).siblings('.js-delete-link').attr('title', 'Delete this error')
-                           .end()
-                           .replaceWith('<span class="js-protected fa fa-lock fa-fw text-primary" title="This error is protected"></span>');
+                        .end()
+                        .replaceWith('<span class="js-protected fa fa-lock fa-fw text-primary" title="This error is protected"></span>');
                     jRow.addClass('js-protected protected').removeClass('deleted');
                     refreshCounts(data);
                 },
@@ -1209,7 +1217,7 @@ Status.Exceptions = (function () {
                 var index = row.index(),
                     lastIndex = lastSelected.index();
                 if (!e.ctrlKey) {
-                    row.siblings().andSelf().removeClass('active warning');
+                    row.siblings('.active, .warning').andSelf().removeClass('active warning');
                 }
                 row.parent()
                     .children()
@@ -1218,16 +1226,24 @@ Status.Exceptions = (function () {
                 if (!e.ctrlKey) {
                     lastSelected = row.first();
                 }
-                // TODO: Improve, possibly with a before/after unselectable style application
-                window.getSelection().removeAllRanges();
             } else if (e.ctrlKey) {
                 lastSelected = row.first();
             } else {
                 if ($('.js-exceptions tbody td').length > 2) {
                     row.addClass('active warning');
                 }
-                row.siblings().removeClass('active warning');
+                row.siblings('.active, .warning').removeClass('active warning');
                 lastSelected = row.first();
+            }
+        });
+
+        $(document).on('keydown', function (e) {
+            if (e.keyCode == 16) { // shift
+                $('.js-table-exceptions').addClass('no-select');
+            }
+        }).on('keyup', function (e) {
+            if (e.keyCode == 16) { // shift
+                $('.js-table-exceptions').removeClass('no-select');
             }
         });
 
@@ -1279,11 +1295,6 @@ Status.Exceptions = (function () {
                     jThis.find('.fa').addClass('icon-rotate-flip');
                     $.ajax({
                         type: 'POST',
-                        data: $.extend({}, baseOptions, {
-                            group: jThis.data('group') || options.group,
-                            log: jThis.data('log') || options.log,
-                            id: jThis.data('id') || options.id
-                        }),
                         url: jThis.data('url'),
                         success: function (data) {
                             if (data.url) {
@@ -1295,34 +1306,6 @@ Status.Exceptions = (function () {
                         error: function(xhr) {
                             jThis.find('.fa').removeClass('icon-rotate-flip');
                             jThis.parent().errorPopupFromJSON(xhr, 'An error occurred clearing this log');
-                        }
-                    });
-                }
-            });
-            return false;
-        });
-
-        $(document).on('click', 'a.js-clear-visible', function () {
-            var jThis = $(this);
-            bootbox.confirm('Really delete all visible, non-protected errors?', function (result) {
-                if (result)
-                {
-                    var ids = $('.js-error:not(.protected,.deleted)').map(function () { return $(this).data('id'); }).get();
-                    jThis.find('.fa').addClass('icon-rotate-flip');
-
-                    $.ajax({
-                        type: 'POST',
-                        traditional: true,
-                        data: $.extend({}, baseOptions, {
-                            ids: ids
-                        }),
-                        url: jThis.data('url'),
-                        success: function (data) {
-                            window.location.href = data.url;
-                        },
-                        error: function (xhr) {
-                            jThis.find('.fa').removeClass('icon-rotate-flip');
-                            jThis.parent().errorPopupFromJSON(xhr, 'An error occurred clearing visible exceptions');
                         }
                     });
                 }

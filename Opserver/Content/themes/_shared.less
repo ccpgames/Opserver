@@ -370,7 +370,7 @@ span.pull-right a.pull-right {
   }
 }
 
-.profiler-results.profiler-left {
+.mp-results.mp-left {
   position: absolute;
   top: @miniprofiler-top-margin;
   border-bottom-right-radius: 10px;
@@ -737,6 +737,10 @@ span.pull-right a.pull-right {
   height: 265px;
 }
 
+.no-select {
+  .user-select(none);
+}
+
 .comma-list {
   display: inline;
   list-style: none;
@@ -857,4 +861,12 @@ tr.cache-sub-item td:first-child {
 
 .total-row {
     font-weight: bold;
+}
+
+pre {
+    padding: 0;
+    font-size: 1em;
+    code, code.hljs {
+        border: none;
+    }
 }
