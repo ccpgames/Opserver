@@ -3,6 +3,7 @@
     "instances": [
       {
         "analysisRegexes": {
+          "SSO Single User Tokens": "SingleUseToken",
           "SSO Throttles": "SSO:.*:LoginThrottle",
           "SSO Country List": "SSO:.*:Countries",
           "SSO Role List": "SSO:.*:Roles",
