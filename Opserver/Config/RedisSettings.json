@@ -7,6 +7,8 @@
           "SSO Throttles": "SSO:.*:LoginThrottle",
           "SSO Token Replay Cache": "SSO:.*:TokenReplay",
           "SSO Steam Tickets": "SSO:.*:SteamTickets",
+          "SSO Character Authorization State": "SSO:.*:CharacterAuthorizationState",
+          "SSO Token Data": "SSO:.*:TokenData",
           "SSO Country List": "SSO:.*:Countries",
           "SSO Role List": "SSO:.*:Roles",
           "SSO Status List": "SSO:.*:Statuses",
