@@ -3,7 +3,7 @@
     "instances": [
       {
         "analysisRegexes": {
-          "SSO Throttles": "SSO:[\\w\\.]+:LoginThrottle",
+          "SSO Throttles": "SSO:[\\w\\.]+:\\d+.\\d+.\\d+.\\d+:LoginThrottle",
           "SSO Country List": "SSO:[\\w\\.]+:Countries",
           "SSO Role List": "SSO:[\\w\\.]+:Roles",
           "SSO Status List": "SSO:[\\w\\.]+:Statuses",
@@ -17,7 +17,7 @@
           "SSO Clients by Name": "SSO:[\\w\\.]+:Client:Name",
           "SSO Access Tokens": "SSO:[\\w\\.]+:AccessToken",
           "SSO Verification Codes": "SSO:[\\w\\.]+:TwoFactorVerificationCode",
-          "HaveIBeenPwned Ranges": "SSO:[\\w\\.]+:HaveIBeenPwned",
+          "HaveIBeenPwned Ranges": ":HaveIBeenPwned:[a-zA-Z0-9]{5}",
           "CIS Customer Email Change Requests": "CIS:[\\w\\.]+:Customers:\\d*:ChangeEmailAddress",
           "CIS Email Verification": "CIS:[\\w\\.]+:EmailVerification:\\w+:\\d*",
           "CIS Email Verification (Old)": "CIS:[\\w\\.]+:EmailVerification:[A-Fa-f0-9]*",
