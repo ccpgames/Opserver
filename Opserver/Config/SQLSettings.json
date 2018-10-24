@@ -15,10 +15,6 @@
           "connectionString": "Data Source=rkv-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
         },
         {
-          "name": "LHR-WEBDB",
-          "connectionString": "Data Source=lhr-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
-        },
-        {
           "name": "LHR-TQDB",
           "connectionString": "Data Source=lhr-tqdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
         },
