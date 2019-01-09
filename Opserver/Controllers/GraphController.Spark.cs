@@ -2,9 +2,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using StackExchange.Opserver.Data.Dashboard;
 using StackExchange.Opserver.Data.SQL;
@@ -41,6 +44,8 @@ namespace StackExchange.Opserver.Controllers
         public Task<ActionResult> CPUSparkSvgAll()
         {
             return SparkSvgAll(
+                "AllCPU",
+                TimeSpan.FromMinutes(2),
                 getPoints: n => n.GetCPUUtilization(SparkStart, null, SparkPoints),
                 getMax: (n, p) => 100,
                 getVal: p => p.Value.GetValueOrDefault());
@@ -64,6 +69,8 @@ namespace StackExchange.Opserver.Controllers
         public Task<ActionResult> MemorySparkSvgAll()
         {
             return SparkSvgAll(
+                "AllMemory",
+                TimeSpan.FromMinutes(2),
                 getPoints: n => n.GetMemoryUtilization(SparkStart, null, SparkPoints),
                 getMax: (n, p) => Convert.ToInt64(n.TotalMemory.GetValueOrDefault()),
                 getVal: p => p.Value.GetValueOrDefault());
@@ -87,6 +94,8 @@ namespace StackExchange.Opserver.Controllers
         public Task<ActionResult> NetworkSparkSvgAll()
         {
             return SparkSvgAll(
+                "AllNetwork",
+                TimeSpan.FromMinutes(2),
                 getPoints: n => n.GetNetworkUtilization(SparkStart, null, SparkPoints),
                 getMax: (n, points) => Convert.ToInt64(points.Max(p => p.Value + p.BottomValue).GetValueOrDefault()),
                 getVal: p => (p.Value + p.BottomValue).GetValueOrDefault());
@@ -151,8 +160,17 @@ namespace StackExchange.Opserver.Controllers
             return SparkSVG(points, 100, p => p.ProcessUtilization, start);
         }
 
-        public static async Task<ActionResult> SparkSvgAll<T>(Func<Node, Task<List<T>>> getPoints, Func<Node, List<T>, long> getMax, Func<T, double> getVal) where T : IGraphPoint
+        private async Task<ActionResult> SparkSvgAll<T>(string cacheKey, TimeSpan cacheDuration, Func<Node, Task<List<T>>> getPoints, Func<Node, List<T>, long> getMax, Func<T, double> getVal) where T : IGraphPoint
         {
+            Response.Headers.Remove("Content-Encoding");
+            Response.AppendHeader("Content-Encoding", "gzip");
+
+            var cached = Current.LocalCache.Get<byte[]>(cacheKey);
+            if (cached != null)
+            {
+                return new FileContentResult(cached, "image/svg+xml");
+            }
+
             const int width = SparkPoints;
 
             var nodes = DashboardModule.AllNodes;
@@ -216,12 +234,22 @@ namespace StackExchange.Opserver.Controllers
                   .Append(@" z""/>\n")
                   .Append("\t</g>\n");
 
-                currentYTop += SparkHeight;
+                currentYTop += SparkHeight + 1;
             }
 
             sb.Append("</svg>");
             var bytes = Encoding.UTF8.GetBytes(sb.ToStringRecycle());
-            return new FileContentResult(bytes, "image/svg+xml");
+
+            using (var outputStream = new MemoryStream())
+            {
+                using (var gZipStream = new GZipStream(outputStream, CompressionMode.Compress))
+                {
+                    gZipStream.Write(bytes, 0, bytes.Length);
+                }
+                var zippedBytes = outputStream.ToArray();
+                Current.LocalCache.Set(cacheKey, zippedBytes, cacheDuration);
+                return new FileContentResult(zippedBytes, "image/svg+xml");
+            }
         }
 
         private static FileResult SparkSVG<T>(IEnumerable<T> points, long max, Func<T, double> getVal, DateTime? start = null) where T : IGraphPoint
