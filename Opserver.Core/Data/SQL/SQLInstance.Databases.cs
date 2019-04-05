@@ -799,13 +799,13 @@ Drop Table #vlfTemp;";
             public string TableName { get; internal set; }
             public DateTime CreationDate { get; internal set; }
             public DateTime LastModifiedDate { get; internal set; }
-            public int MemoryTableSizeKB { get; internal set; }
-            public int MemoryIndexSizeKB { get; internal set; }
-            public int MemoryTotalSizeKB => MemoryTableSizeKB + MemoryIndexSizeKB;
-            public int InsertAttempts { get; internal set; }
-            public int DeleteAttempts { get; internal set; }
-            public int UpdateAttempts { get; internal set; }
-            public int RowCount { get; internal set; }
+            public long MemoryTableSizeKB { get; internal set; }
+            public long MemoryIndexSizeKB { get; internal set; }
+            public long MemoryTotalSizeKB => MemoryTableSizeKB + MemoryIndexSizeKB;
+            public long InsertAttempts { get; internal set; }
+            public long DeleteAttempts { get; internal set; }
+            public long UpdateAttempts { get; internal set; }
+            public long RowCount { get; internal set; }
 
             public string GetFetchSQL(Version v) => @"
 SELECT t.object_id Id,
