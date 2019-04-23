@@ -106,6 +106,7 @@
     <Content Include="Content\img\logo\icon-256.png" />
     <Content Include="Content\img\logo\icon-32.png" />
     <Content Include="Content\img\logo\icon.svg" />
+    <Content Include="Content\img\query-plan\icons.png" />
     <Content Include="Content\js\jquery-1.11.3.js" />
     <Content Include="Content\js\jquery-1.11.3.map">
       <DependentUpon>jquery-1.11.3.js</DependentUpon>
