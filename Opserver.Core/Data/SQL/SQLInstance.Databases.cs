@@ -1332,7 +1332,7 @@ Select sc.name SchemaName,
                             And p.index_id = si.index_id
                             And p.data_compression = 2
                        Order By p.partition_number For XML Path(''), Type).value('.', 'NVARCHAR(MAX)'),1,2,'')) page_compression_clause (page_compression_partition_list)
- Where si.type In (0,1,2) /* heap, clustered, nonclustered */
+ Where si.type In (0,1,2,7) /* heap, clustered, nonclustered */
 Order By sc.name, t.name, si.index_id
 Option (Recompile);";
         }
