@@ -23,7 +23,7 @@
           "SSO Clients by Name": "SSO:.*:Client:Name",
           "SSO Access Tokens": "SSO:.*:AccessToken",
           "SSO Verification Codes": "SSO:.*:TwoFactorVerificationCode",
-          "HaveIBeenPwned Ranges": "SSO:.*:HaveIBeenPwned:[a-zA-Z0-9]{5}",
+          "HaveIBeenPwned Ranges": ":HIBP:",
           "CIS Customer Email Change Requests": "CIS:[\\w\\.]+:Customers:\\d*:ChangeEmailAddress",
           "CIS Email Verification": "CIS:[\\w\\.]+:EmailVerification:\\w+:\\d*",
           "CIS Email Verification (Old)": "CIS:[\\w\\.]+:EmailVerification:[A-Fa-f0-9]*",
