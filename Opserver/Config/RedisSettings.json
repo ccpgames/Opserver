@@ -4,9 +4,9 @@
       {
         "analysisRegexes": {
           "SSO Single User Tokens": "SingleUseToken",
-          "SSO Throttles": ":.*:LoginThrottle",
+          "SSO Throttles": ".*:LoginThrottle",
           "SSO Token Replay Cache": ".*:TokenReplay",
-          "SSO Steam Tickets": ":.*:SteamTickets",
+          "SSO Steam Tickets": ".*:SteamTickets",
           "SSO Character Authorization State": ".*:CharacterAuthorizationState",
           "SSO Token Data": ".*:TokenData",
           "SSO Country List": ":.*:Countries",
