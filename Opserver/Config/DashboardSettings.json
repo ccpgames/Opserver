@@ -17,7 +17,7 @@
   "categories": [
     {
       "name": "Tranquility - Mammon",
-      "pattern": "^LHR-(TQ(VGS|SSO|MAIL)|CIS|MAM|OPSSERVER)",
+      "pattern": "^LHR-(TQ(VGS|SSO|MAIL)|CIS|MAM|OPSSERVER|SSO)",
       "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
     },
     {
