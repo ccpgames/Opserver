@@ -3,11 +3,11 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using StackExchange.Opserver.Helpers;
+
 using StackExchange.Opserver.Data.Dashboard;
+using StackExchange.Opserver.Helpers;
 
 namespace StackExchange.Opserver.Data.SQL
 {
@@ -127,7 +127,7 @@ namespace StackExchange.Opserver.Data.SQL
             where T : class, ISQLVersioned, new()
         {
             return GetSqlCache(memberName,
-                conn => conn.QueryAsync<T>(GetFetchSQL<T>()),
+                conn => conn.QueryAsync<T>(GetFetchSQL<T>(), commandTimeout: 120),
                 Supports<T>,
                 cacheDuration,
                 memberName: memberName,
@@ -144,7 +144,7 @@ namespace StackExchange.Opserver.Data.SQL
             where T : class, ISQLVersioned, new()
         {
             return GetSqlCache(memberName,
-                conn => conn.QueryFirstOrDefaultAsync<T>(GetFetchSQL<T>()),
+                conn => conn.QueryFirstOrDefaultAsync<T>(GetFetchSQL<T>(), commandTimeout: 120),
                 Supports<T>,
                 cacheDuration,
                 logExceptions: true,
