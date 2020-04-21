@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+
 using Dapper;
+
 using EnumsNET;
 
 namespace StackExchange.Opserver.Data.SQL
@@ -101,7 +103,7 @@ namespace StackExchange.Opserver.Data.SQL
                 conn =>
                 {
                     conn.ChangeDatabase(databaseName);
-                    return conn.Query<T>(GetFetchSQL<T>(), new { databaseName }).AsList();
+                    return conn.Query<T>(GetFetchSQL<T>(), new { databaseName }, commandTimeout: 120).AsList();
                 },
                 duration ?? 5.Minutes(),
                 staleDuration: 5.Minutes());
