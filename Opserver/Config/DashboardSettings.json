@@ -41,6 +41,26 @@
       "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
     },
     {
+      "name": "Pulsar",
+      "pattern": "^RKV-PUL(?!DB)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Helix",
+      "pattern": "^RKV-HEL(?!DB)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Fractal",
+      "pattern": "^RKV-FRA(?!DB)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
+      "name": "Winston",
+      "pattern": "^RKV-WIN(?!DB)",
+      "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
+    },
+    {
       "name": "Database Servers",
       "pattern": "^(LHR|RKV)-(.*DB(\\d+)?)",
       "primaryInterfacePattern": "(Emulex|vmxnet3|eth0|elxnet)"
