@@ -5,14 +5,14 @@
       "name": "LHR-WEBDB",
       "refreshIntervalSeconds": 20,
       "nodes": [
-        { "name": "lhr-webdb.dbccpgames.net" },
-        { "name": "rkv-webdbao.dbccpgames.net" }
+        { "name": "lhr-webdb-prod-internal.dbccpgames.net" },
+        { "name": "kef-webdbao.dbccpgames.net" }
       ]
     }],
       "instances": [
         {
-          "name": "RKV-WEBDB",
-          "connectionString": "Data Source=rkv-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
+          "name": "KEF-WEBDB",
+          "connectionString": "Data Source=kef-webdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
         },
         {
           "name": "LHR-TQDB",
