@@ -2,7 +2,7 @@
   "providers": {
     "orion": {
       "host": "solarwinds",
-      "connectionString": "Server=10.101.2.150;Database=SolarWindsOrion;Trusted_Connection=True;Timeout=10"
+      "connectionString": "Server=10.101.2.220;Database=SolarWindsOrion;Trusted_Connection=True;Timeout=10"
     }
   },
   "showOther": false,
