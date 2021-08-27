@@ -83,6 +83,7 @@ namespace StackExchange.Opserver.Data.SQL
                 {
                     if (Version.HasValue())
                     {
+                        if (Version.StartsWith("15.")) return "SQL 2019";
                         if (Version.StartsWith("14.")) return "SQL 2017";
                         if (Version.StartsWith("13.")) return "SQL 2016";
                         if (Version.StartsWith("12.")) return "SQL 2014";
@@ -114,7 +115,7 @@ Select Cast(SERVERPROPERTY(''ProductVersion'') as nvarchar(128)) Version,
        Cast(SERVERPROPERTY(''ProcessID'') as int) ProcessID,
        (Select Count(*) From sys.dm_exec_sessions) SessionCount,
        (Select Count(*) From sys.dm_exec_connections) ConnectionCount,
-       (Select Sum(current_workers_count) From sys.dm_os_schedulers) CurrentWorkerCount,
+       (Select Sum(active_workers_count)  From sys.dm_os_schedulers Where status = ''VISIBLE ONLINE'') CurrentWorkerCount,
        (Select Count(*) From msdb.dbo.sysjobs) JobCount,
        cpu_count CPUCount,
        hyperthread_ratio HyperthreadRatio,
