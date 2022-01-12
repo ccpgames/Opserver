@@ -16,7 +16,7 @@
         },
         {
           "name": "LHR-TQDB",
-          "connectionString": "Data Source=lhr-tqdb.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
+          "connectionString": "Data Source=lhr-tqdb64.dbccpgames.net;Initial Catalog=master;Integrated Security=SSPI;"
         }
       ]
     }
